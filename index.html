@@ -3,10 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SOMAPON HANGCHURI - Hire Me</title>
+<title>SOMAPON HANGCHURI - 2 in 1</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
-body{background:#050505;color:#fff;font-family:'JetBrains Mono',monospace;padding:15px;text-align:center;margin:0}
+body{background:#050505;color:#fff;font-family:'JetBrains Mono',monospace;margin:0;padding:15px;text-align:center}
+.switch{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.s-btn{border:1px solid #00FF41;color:#00FF41;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold;background:transparent;font-family:'JetBrains Mono',monospace}
+.s-btn.active{background:#00FF41;color:#000;box-shadow:0 0 15px #00FF41}
+.page{display:none}
+.page.active{display:block;animation:fade 0.3s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
 img.main{width:110px;height:110px;border-radius:50%;border:3px solid #00FF41;box-shadow:0 0 20px #00FF4144}
 h1{color:#00FF41;letter-spacing:2px;text-shadow:0 0 10px #00FF41;margin:15px 0 5px 0}
 .tag{color:#888;font-size:12px;margin-bottom:20px}
@@ -14,27 +20,66 @@ h1{color:#00FF41;letter-spacing:2px;text-shadow:0 0 10px #00FF41;margin:15px 0 5
 .box h2{color:#00FF41;font-size:14px;margin:0 0 10px 0;border-bottom:1px dashed #333;padding-bottom:8px}
 .box p{font-size:13px;line-height:1.7;color:#ccc;margin:0}
 .btn{background:#00FF41;color:#000;padding:14px;display:block;text-align:center;font-weight:bold;text-decoration:none;border-radius:8px;margin-top:14px;letter-spacing:1px}
-.btn:hover{background:#fff;box-shadow:0 0 15px #00FF41}
-.footer{font-size:10px;color:#444;margin-top:25px;letter-spacing:1px}
+.btn2{border:1px solid #00FF41;color:#00FF41;background:transparent;padding:14px;display:block;text-align:center;font-weight:bold;text-decoration:none;border-radius:12px;margin-bottom:12px}
+.btn2:hover{background:#00FF41;color:#000}
+.card{border:1px solid #00FF41;border-radius:22px;padding:28px;max-width:380px;background:#0a0a0a;box-shadow:0 0 30px #00FF4133;margin:0 auto;text-align:left}
+.sub{color:#888;font-size:13px;margin:12px 0 18px 0;line-height:1.5}
+.line{height:1px;background:linear-gradient(to right,#00FF41,transparent);margin:18px 0;opacity:0.6}
+.text{color:#ccc;font-size:14px;margin-bottom:14px}
+.skills{background:#00FF4114;border-radius:10px;padding:12px 14px;font-size:13px;color:#aaa;line-height:1.5;margin-bottom:20px}
+.footer{font-size:10px;color:#444;margin-top:25px;letter-spacing:1px;text-align:center}
 </style>
 </head>
 <body>
+
+<div class="switch">
+<div class="s-btn active" id="btn-new" onclick="showPage('new')">NEW SITE</div>
+<div class="s-btn" id="btn-old" onclick="showPage('old')">OLD SITE</div>
+</div>
+
+<!-- NEW DESIGN -->
+<div id="new" class="page active">
+<div class="card">
+<h1>SOMAPON<br>HANGCHURI</h1>
+<div class="sub">[ Ethical Hacker | Developer | Creator ]<br>LOC: Khagrachari, Bangladesh</div>
+<div class="line"></div>
+<div class="text">> Building Future with Code.</div>
+<div class="skills">> Skills: Python | GitHub | OSINT | Web Dev</div>
+<a class="btn2" href="https://github.com/somapon-prog">[ GITHUB ]</a>
+<a class="btn2" href="https://facebook.com">[ FACEBOOK ]</a>
+<a class="btn2" href="https://instagram.com">[ INSTAGRAM ]</a>
+<div class="footer">Made by Somapon | GitGhost v3.0 | 2026</div>
+</div>
+</div>
+
+<!-- OLD DESIGN -->
+<div id="old" class="page">
 <img class="main" src="https://github.com/somapon-prog.png">
 <h1>SOMAPON HANGCHURI</h1>
 <div class="tag">[ Ethical Hacker | Khagrachari, BD ]</div>
-
 <div class="box">
 <h2>> HIRE ME - 500 TAKA</h2>
 <p>Website Security Check / FB Help<br>Bkash: 01623-367437</p>
 <a class="btn" href="https://m.me/6159596496431973">HIRE ME NOW >></a>
 </div>
-
 <div class="box">
 <h2>> SECURITY SERVICES</h2>
 <p>Website Security Check - 200 TAKA<br>Facebook Security Guide - 150 TAKA<br>Full Security Audit - 300 TAKA</p>
 <a class="btn" href="https://m.me/6159596496431973">BUY NOW >></a>
 </div>
-
 <div class="footer">Made by Somapon | SHIELD Tools | 2026</div>
+</div>
+
+<script>
+function showPage(id){
+document.getElementById('new').classList.remove('active');
+document.getElementById('old').classList.remove('active');
+document.getElementById('btn-new').classList.remove('active');
+document.getElementById('btn-old').classList.remove('active');
+document.getElementById(id).classList.add('active');
+document.getElementById('btn-'+id).classList.add('active');
+}
+</script>
+
 </body>
 </html>
