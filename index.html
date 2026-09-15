@@ -3,77 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOMAPON HANGCHURI - 2 in 1</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<title>SOMAPON PORTFOLIO</title>
 <style>
-body{background:#050505;color:#fff;font-family:'JetBrains Mono',monospace;margin:0;padding:15px;text-align:center}
-.switch{display:flex;gap:10px;justify-content:center;margin:20px 0}
-.s-btn{border:1px solid #00FF41;color:#00FF41;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold;background:#111}
-.s-btn.active{background:#00FF41;color:#000;box-shadow:0 0 15px #00FF41}
+body{background:#000;color:#fff;font-family:monospace;text-align:center;padding:20px;margin:0}
+h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
+.box{border:1px solid #00ff88;padding:20px;border-radius:15px;max-width:400px;margin:20px auto;background:#0a0a0a}
+.btn{display:block;background:#00ff88;color:#000;padding:15px;border-radius:10px;text-decoration:none;font-weight:bold;margin-top:15px}
+.btn2{display:block;border:1px solid #00ff88;color:#00ff88;padding:15px;border-radius:10px;text-decoration:none;margin-top:10px}
+.switch{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
+.s{padding:10px 20px;border:1px solid #00ff88;border-radius:20px;cursor:pointer}
+.s.active{background:#00ff88;color:#000}
 .page{display:none}
-.page.active{display:block;animation:fade 0.3s}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-img.main{width:110px;height:110px;border-radius:50%;border:3px solid #00FF41;box-shadow:0 0 20px #00FF41A4}
-h1{color:#00FF41;letter-spacing:2px;text-shadow:0 0 10px #00FF41;margin:15px 0 5px 0}
-.tag{color:#888;font-size:12px;margin-bottom:20px}
-.box{border:1px solid #00FF41;padding:18px;margin:18px auto;background:#0a0a0a;border-radius:14px;text-align:left;max-width:380px}
-.box h2{color:#00FF41;font-size:14px;margin:0 0 10px 0;border-bottom:1px dashed #333;padding-bottom:8px}
-.box p{font-size:13px;line-height:1.7;color:#ccc;margin:0}
-.btn{background:#00FF41;color:#000;padding:14px;display:block;text-align:center;font-weight:bold;text-decoration:none;border-radius:8px;margin-top:12px}
-.btn2{border:1px solid #00FF41;color:#00FF41;background:transparent;padding:14px;display:block;text-align:center;font-weight:bold;text-decoration:none;border-radius:8px;margin-top:8px}
-.sub{color:#888;font-size:13px;margin:12px 0 18px 0;line-height:1.5}
-.line{height:1px;background:linear-gradient(to right,#00FF41,transparent);margin:18px 0;opacity:0.6}
-.footer{font-size:10px;color:#444;margin-top:25px;letter-spacing:1px}
+.page.active{display:block}
 </style>
 </head>
 <body>
 
 <div class="switch">
-<div class="s-btn active" id="btn-new" onclick="showPage('new')">NEW SITE</div>
-<div class="s-btn" id="btn-old" onclick="showPage('old')">OLD SITE</div>
+<div class="s active" id="b1" onclick="show('p1','b1')">NEW SITE</div>
+<div class="s" id="b2" onclick="show('p2','b2')">OLD SITE</div>
 </div>
 
-<!-- NEW DESIGN -->
-<div id="new" class="page active">
-<div style="border:1px solid #00FF41;padding:20px;border-radius:14px;max-width:380px;margin:0 auto;background:#0a0a0a;box-shadow:0 0 30px #00FF4130">
+<div id="p1" class="page active">
 <h1>SOMAPON<br>HANGCHURI</h1>
-<div class="sub">[ Ethical Hacker | Developer | Creator ]<br>LOC: Khagrachari, Bangladesh</div>
-<div class="line"></div>
-<div class="text">>> Building Future with Code.</div>
-<div class="skills">Skills: Python | GitHub | OSINT | Web Dev</div>
-<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Hire%20korte%20chai">HIRE ME ON WHATSAPP >></a>
+<p>Ethical Hacker | Developer<br>Khagrachari, Bangladesh</p>
+<div class="box">
+<p>Building Future with Code<br>Python | GitHub | OSINT</p>
+<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Hire%20korte%20chai">HIRE ME ON WHATSAPP</a>
 <a class="btn2" href="https://www.facebook.com/profile.php?id=6159596496431973">FACEBOOK</a>
-<a class="btn2" href="https://instagram.com">INSTAGRAM</a>
-<div class="footer">Made by Somapon | GitGhost v3.0 | 2026</div>
 </div>
 </div>
 
-<!-- OLD DESIGN -->
-<div id="old" class="page">
-<img class="main" src="https://github.com/somapon-prog.png">
+<div id="p2" class="page">
+<img src="https://github.com/somapon-prog.png" style="width:100px;height:100px;border-radius:50%;border:2px solid #00ff88">
 <h1>SOMAPON HANGCHURI</h1>
-<div class="tag">[ Ethical Hacker | Khagrachari, BD ]</div>
 <div class="box">
-<h2>>> HIRE ME - 500 TAKA /-</h2>
-<p>Website Security Check / FB Help<br>Bkash: 01623-367437</p>
-<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20500%20Takar%20Service%20ta%20lagbe">HIRE ME NOW >>></a>
+<h3 style="color:#00ff88">HIRE ME - 500 TAKA</h3>
+<p>Website Security Check<br>Bkash: 01623-367437</p>
+<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20500%20Takar%20Service">HIRE ME NOW >>></a>
 </div>
 <div class="box">
-<h2>>> SECURITY SERVICES</h2>
-<p>Website Security Check - 200 TAKA<br>Facebook Security Guide - 150 TAKA<br>Full Security Audit - 300 TAKA</p>
-<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Security%20Service%20lagbe">BUY NOW >>></a>
+<h3 style="color:#00ff88">SECURITY SERVICES</h3>
+<p>Check - 200 TK<br>Guide - 150 TK<br>Audit - 300 TK</p>
+<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Security%20lagbe">BUY NOW >>></a>
 </div>
-<div class="footer">Made by Somapon | SHIELD Tools | 2026</div>
 </div>
 
 <script>
-function showPage(id){
-document.getElementById('new').classList.remove('active');
-document.getElementById('old').classList.remove('active');
-document.getElementById('btn-new').classList.remove('active');
-document.getElementById('btn-old').classList.remove('active');
-document.getElementById(id).classList.add('active');
-document.getElementById('btn-'+id).classList.add('active');
+function show(p,b){
+document.getElementById('p1').classList.remove('active');
+document.getElementById('p2').classList.remove('active');
+document.getElementById('b1').classList.remove('active');
+document.getElementById('b2').classList.remove('active');
+document.getElementById(p).classList.add('active');
+document.getElementById(b).classList.add('active');
 }
 </script>
 
