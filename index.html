@@ -8,13 +8,15 @@
 body{background:#000;color:#fff;font-family:monospace;text-align:center;padding:20px;margin:0}
 h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
 .box{border:1px solid #00ff88;padding:20px;border-radius:15px;max-width:400px;margin:20px auto;background:#0a0a0a}
-.btn{display:block;background:#00ff88;color:#000;padding:15px;border-radius:10px;text-decoration:none;font-weight:bold;margin-top:15px}
-.btn2{display:block;border:1px solid #00ff88;color:#00ff88;padding:15px;border-radius:10px;text-decoration:none;margin-top:10px}
+.btn{display:block;background:#00ff88;color:#000;padding:15px;border-radius:10px;text-decoration:none;font-weight:bold;margin-bottom:10px}
+.btn2{display:block;border:1px solid #00ff88;color:#00ff88;padding:15px;border-radius:10px;text-decoration:none;margin-bottom:10px}
 .switch{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
 .s{padding:10px 20px;border:1px solid #00ff88;border-radius:20px;cursor:pointer}
 .s.active{background:#00ff88;color:#000}
 .page{display:none}
 .page.active{display:block}
+#gameArea{width:100%;height:300px;position:relative;background:#111;border:1px solid #00ff88;border-radius:10px;overflow:hidden;margin:15px 0}
+.taka{position:absolute;font-size:25px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -22,15 +24,16 @@ h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
 <div class="switch">
 <div class="s active" id="b1" onclick="show('p1','b1')">NEW SITE</div>
 <div class="s" id="b2" onclick="show('p2','b2')">OLD SITE</div>
+<div class="s" id="b3" onclick="show('p3','b3')">GAME 🎮</div>
 </div>
 
 <div id="p1" class="page active">
 <h1>SOMAPON<br>HANGCHURI</h1>
 <p>Ethical Hacker | Developer<br>Khagrachari, Bangladesh</p>
 <div class="box">
-<p>Building Future with Code<br>Python | GitHub | OSINT</p>
+<p>Building Future with Code<br>Python | Github | OSINT</p>
 <a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Hire%20korte%20chai">HIRE ME ON WHATSAPP</a>
-<a class="btn2" href="https://www.facebook.com/profile.php?id=6159596496431973">FACEBOOK</a>
+<a class="btn2" href="https://www.facebook.com/profile.php?id=615590469431973">FACEBOOK</a>
 </div>
 </div>
 
@@ -39,13 +42,24 @@ h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
 <h1>SOMAPON HANGCHURI</h1>
 <div class="box">
 <h3 style="color:#00ff88">HIRE ME - 500 TAKA</h3>
-<p>Website Security Check<br>Bkash: 01623-367437</p>
-<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20500%20Takar%20Service">HIRE ME NOW >>></a>
+<p>Website Security Check<br>bkash: 01623-367437</p>
+<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20500%20Taka%20Service">HIRE ME NOW >>></a>
 </div>
 <div class="box">
 <h3 style="color:#00ff88">SECURITY SERVICES</h3>
-<p>Check - 200 TK<br>Guide - 150 TK<br>Audit - 300 TK</p>
+<p>Check - 200 Tk<br>Guide - 150 Tk<br>Audit - 300 Tk</p>
 <a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Security%20lagbe">BUY NOW >>></a>
+</div>
+</div>
+
+<div id="p3" class="page">
+<h1 style="color:#00ff88">SOMAPON TAP GAME</h1>
+<p>TESTER GAME - 30 Sec Challenge</p>
+<div class="box">
+<p id="score">Taka: 0 | Time: 30</p>
+<div id="gameArea"></div>
+<button class="btn" onclick="startGame()" style="width:100%">START GAME</button>
+<p style="font-size:12px;margin-top:10px">💰 te tap koro! Koto Taka paro?</p>
 </div>
 </div>
 
@@ -53,10 +67,35 @@ h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
 function show(p,b){
 document.getElementById('p1').classList.remove('active');
 document.getElementById('p2').classList.remove('active');
+document.getElementById('p3').classList.remove('active');
 document.getElementById('b1').classList.remove('active');
 document.getElementById('b2').classList.remove('active');
+document.getElementById('b3').classList.remove('active');
 document.getElementById(p).classList.add('active');
 document.getElementById(b).classList.add('active');
+}
+let score=0,time=30,active=false,timer;
+function startGame(){
+score=0;time=30;active=true;
+document.getElementById('gameArea').innerHTML='';
+document.getElementById('score').innerText=`Taka: 0 | Time: 30`;
+clearInterval(timer);
+timer=setInterval(()=>{
+ time--;
+ document.getElementById('score').innerText=`Taka: ${score} | Time: ${time}`;
+ if(time<=0){active=false;clearInterval(timer);alert(`BOSS! ${score} Taka! ScreenShot den!`)}
+},1000);
+spawn();
+}
+function spawn(){
+if(!active) return;
+let d=document.createElement('div');
+d.className='taka'; d.innerText='💰';
+d.style.left=Math.random()*85+'%';
+d.style.top=Math.random()*80+'%';
+d.onclick=()=>{score+=10;d.remove();spawn()};
+document.getElementById('gameArea').appendChild(d);
+setTimeout(()=>{if(d.parentNode)d.remove(); if(active)spawn()},1000);
 }
 </script>
 
