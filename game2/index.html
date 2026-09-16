@@ -1,46 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Car Racing Fixed</title>
+<title>CTG NIGHT RIDER</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#fff;font-family:Arial;overflow:hidden}
-#top{height:50px;background:#1e293b;display:flex;justify-content:space-between;align-items:center;padding:0 15px;position:fixed;top:0;width:100%;z-index:10}
-#top a{color:#22c55e;text-decoration:none;font-weight:bold}
-#wrap{margin-top:50px;display:flex;justify-content:center}
-canvas{background:#334155}
-#controls{position:fixed;bottom:20px;width:100%;display:flex;justify-content:space-between;padding:0 30px}
-.btn{width:75px;height:75px;background:rgba(255,255,255,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid #fff}
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+body{background:#020617;color:#fff;font-family:Arial;overflow:hidden;text-align:center}
+#top{background:#0f172a;padding:10px;display:flex;justify-content:space-between;border-bottom:2px solid #22c55e}
+canvas{background:linear-gradient(#020617,#1e293b);display:block;margin:0 auto}
+#ctrl{position:fixed;bottom:0;left:0;right:0;background:#0f172a;padding:10px;display:flex;justify-content:center;gap:20px;border-top:2px solid #333}
+.btn{width:85px;height:85px;background:#1e293b;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.btn:active{background:#22c55e;color:#000}
+#win{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#000;border:3px solid #22c55e;padding:20px;border-radius:15px;display:none;z-index:99;width:80%}
 </style>
 </head>
 <body>
-<div id="top"><a href="../">⬅ Hub</a><div id="score">SCORE:0</div><div>🏎️</div></div>
-<div id="wrap"><canvas id="c" width="360" height="600"></canvas></div>
-<div id="controls"><div class="btn" id="L">⬅️</div><div class="btn" id="R">➡️</div></div>
+<div id="top">
+<div>SPEED: <b id="sp">0</b> km/h</div>
+<div style="color:#22c55e;font-weight:bold">CTG RIDER</div>
+<div>SCORE: <b id="sc">0</b></div>
+</div>
+<canvas id="g" width="400" height="520"></canvas>
+<div id="ctrl">
+<div class="btn" id="left">LEFT</div>
+<div class="btn" id="right">RIGHT</div>
+<div class="btn" id="nitro">NITRO</div>
+</div>
+<div id="win">
+<h2 id="wt"></h2>
+<p id="ws" style="margin:10px 0;color:#aaa"></p>
+<button onclick="location.reload()" style="padding:10px 20px;background:#22c55e;border:0;border-radius:8px;font-weight:bold">AGAIN</button><br><br>
+<a href="../" style="color:#fff;border:1px solid #fff;padding:5px 10px;text-decoration:none;border-radius:5px">HOME</a>
+</div>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d');
-let car={x:155,y:480,w:50,h:80,s:6},keys={},en=[],sc=0,last=0;
-function spawn(){en.push({x:Math.random()*260+20,y:-100,w:50,h:80,sp:3+Math.random()*3,c:'hsl('+Math.random()*360+',90%,60%)'})}
-function loop(t){
-x.fillStyle='#334155';x.fillRect(0,0,360,600);
-x.fillStyle='#1e293b';x.fillRect(0,0,25,600);x.fillRect(335,0,25,600);
-x.strokeStyle='#fff';x.setLineDash([20,20]);x.beginPath();x.moveTo(180,0);x.lineTo(180,600);x.stroke();x.setLineDash([]);
-if(keys.l)car.x-=car.s;if(keys.r)car.x+=car.s;
-car.x=Math.max(25,Math.min(285,car.x));
-if(t-last>800){spawn();last=t;}
-en.forEach(e=>e.y+=e.sp);en=en.filter(e=>e.y<650);
-for(let e of en){if(car.x<e.x+e.w&&car.x+car.w>e.x&&car.y<e.y+e.h&&car.y+car.h>e.y){alert('Game Over Score:'+sc);en=[];sc=0;car.x=155;break;}}
-sc++;document.getElementById('score').innerText='SCORE:'+sc;
-en.forEach(e=>{x.fillStyle=e.c;x.fillRect(e.x,e.y,e.w,e.h)});
-x.fillStyle='#22c55e';x.fillRect(car.x,car.y,car.w,car.h);
-requestAnimationFrame(loop);
+const cv=document.getElementById('g'), cx=cv.getContext('2d');
+let bike={x:200,y:400,w:24,h:50,speed:5}, score=0, over=false, nitro=false, cars=[], t=0;
+function spawn(){
+ if(Math.random()<0.03+score*0.0001){
+  cars.push({x: 40+Math.random()*320, y:-60, w:28, h:55, s:2+Math.random()*3});
+ }
 }
-loop(0);
-function bind(id,k){let b=document.getElementById(id);b.addEventListener('touchstart',e=>{e.preventDefault();keys[k]=true});b.addEventListener('touchend',()=>keys[k]=false);b.addEventListener('mousedown',()=>keys[k]=true);b.addEventListener('mouseup',()=>keys[k]=false);}
-bind('L','l');bind('R','r');
-addEventListener('keydown',e=>{if(e.key=='ArrowLeft')keys.l=true;if(e.key=='ArrowRight')keys.r=true});
-addEventListener('keyup',e=>{if(e.key=='ArrowLeft')keys.l=false;if(e.key=='ArrowRight')keys.r=false});
-</script>
-</body>
-</html>
+function loop(){
+ if(over) return;
+ t++; cx.clearRect(0,0,400,520);
+ cx.strokeStyle='#334155'; cx.lineWidth=2;
+ cx.setLineDash([20,20]);
+ cx.beginPath(); cx.moveTo(130,t%40); cx.lineTo(130,520);
+ cx.moveTo(270,t%40); cx.lineTo(270,520); cx.stroke();
+ cx.setLineDash([]);
+ cx.fillStyle='#1e293b'; cx.fillRect(0,0,15,520); cx.fillRect(385,0,15,520);
+ let spd = nitro?12:bike.speed;
+ bike.speed = nitro?12:5+score*0.01;
+ spawn();
+ for(let i=cars.length-1;i>=0;i--){
+  let c=cars[i]; c.y+=c.s+spd*0.2;
+  cx.fillStyle='#ef4444'; cx.fillRect(c.x,c.y,c.w,c.h);
+  cx.fillStyle='#000'; cx.fillRect(c.x+3,c.y+5,c.w-6,10); cx.fillRect(c.x+3,c.y+c.h-15,c.w-6,10);
+  if(c.y>540){ cars.splice(i,1); score+=10; }
+  if(c.x < bike.x+bike.w && c.x+c.w > bike.x-bike.w/2 && c.y < bike.y+bike.h && c.y+c.h > bike.y){
+   over=true; document.getElementById('win').style.display='block';
+   document.getElementById('wt').innerText='CRASH!';
+   document.getElementById('ws').innerText='Score: '+score+' | CTG Rider Down!';
+  }
+ }
+ cx.fillStyle=nitro?'#22c55e':'#facc15';
+ cx.fillRect(bike.x-bike.w/2,bike.y,bike.w,bike.h);
+ cx.fillStyle='#000'; cx.fillRect(bike.x-bike.w/2+4,bike.y+4,bike.w-8,8);
+ cx.fillStyle='#fff'; cx.beginPath(); cx.arc(bike.x,bike.y-2,6,0,7); cx.fill();
+ if(nitro){ cx.fillStyle='#22c55e'; cx.fillRect(bike.x-8,bike.y+bike.h,bike.w-8,15); }
+ document.getElementById('sp').innerText=Math.floor(spd*15);
+ document.getElementById('sc').innerText=score;
+ if(!over) requestAnimationFrame(loop);
+}
+function bind(id,down,up){
+ const e=document.getElementById(id);
+ e.addEventListener('touchstart',ev=>{ev.preventDefault();down()});
+ e.addEventListener('touchend',ev=>{ev.preventDefault();if(up)up()});
+ e.addEventListener('mousedown',down);
+ e.addEventListener('mouseup',
