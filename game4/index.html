@@ -1,39 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Football</title>
-<style>
-body{margin:0;background:#16a34a;font-family:Arial;text-align:center;color:white;padding:10px}
-#field{width:90%;max-width:360px;height:50vh;background:#15803d;border:5px solid white;margin:15px auto;position:relative;border-radius:12px}
-#keeper{position:absolute;top:20px;left:40%;font-size:45px;transition:0.3s}
-#ball{position:absolute;bottom:15px;left:42%;font-size:45px;transition:0.5s}
-.btn{padding:14px 18px;font-size:16px;font-weight:bold;margin:4px;border-radius:10px;border:none;min-width:90px}
-</style>
-</head>
-<body>
-<h2>⚽ FOOTBALL GAME ⚽</h2>
-<h3 id="sc">Score: 0</h3>
-<div id="field"><div id="keeper">🧤</div><div id="ball">⚽</div></div>
-<button class="btn" onclick="shoot(0)">⬅ LEFT</button>
-<button class="btn" onclick="shoot(1)" style="background:yellow">CENTER</button>
-<button class="btn" onclick="shoot(2)">RIGHT ➡</button>
-<br><br><a href="../" style="color:yellow">⬅ BACK TO 50 GAMES</a>
-<script>
-let s=0;
-function shoot(d){
-let kp=Math.floor(Math.random()*3);
-let k=document.getElementById('keeper');
-k.style.left=kp==0?'5%':kp==1?'40%':'70%';
-let b=document.getElementById('ball');
-b.style.left=d==0?'10%':d==1?'42%':'72%';
-b.style.bottom='70%';
-setTimeout(()=>{
-if(d!=kp){s++;document.getElementById('sc').innerText='Score: '+s}
-else{alert('Saved! Score: '+s);s=0;document.getElementById('sc').innerText='Score: 0'}
-b.style.bottom='15px';b.style.left='42%';
-},500);
-}
-</script>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0;background:#16a34a;text-align:center;font-family:Arial;color:#fff}
+#box{width:310px;height:380px;background:#15803d;border:4px solid #fff;margin:12px auto;position:relative;border-radius:10px}
+#k{position:absolute;top:15px;left:125px;font-size:38px;transition:.3s}
+#b{position:absolute;bottom:15px;left:130px;font-size:38px;transition:.4s}
+button{padding:12px 16px;margin:4px;border-radius:8px;border:0;font-weight:bold}
+</style></head><body>
+<h3>⚽ FOOTBALL GAME ⚽</h3>
+<h3 id="s">Score: 0</h3>
+<div id="box"><div id="k">🧤</div><div id="b">⚽</div></div>
+<button onclick="go(0)">⬅ LEFT</button>
+<button onclick="go(1)" style="background:yellow">CENTER</button>
+<button onclick="go(2)">RIGHT ➡</button><br><br>
+<a href="../" style="color:yellow">⬅ BACK</a>
+<script>let sc=0;function go(d){let p=Math.floor(Math.random()*3);let k=document.getElementById('k');k.style.left=p==0?'15px':p==1?'125px':'230px';let b=document.getElementById('b');b.style.left=d==0?'20px':d==1?'130px':'235px';b.style.bottom='300px';setTimeout(()=>{if(d!=p){sc++;document.getElementById('s').innerText='Score: '+sc}else{alert('Saved! Score '+sc);sc=0;document.getElementById('s').innerText='Score: 0'}b.style.bottom='15px'},450)}</script>
+</body></html>
