@@ -1,85 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Mini Militia - By Somapon</title>
+<title>REAL STICK BOSS</title>
 <style>
-html,body{margin:0;padding:0;background:#87CEEB;overflow:hidden;height:100%;touch-action:none}
-#game{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#87CEEB}
-#ui{position:fixed;top:10px;left:0;right:0;display:flex;justify-content:space-between;padding:0 10px;z-index:10}
-.box{background:rgba(0,0,0,.85);color:#fff;padding:7px 14px;border-radius:20px;font-family:Arial;font-weight:bold}
-#joy{position:fixed;bottom:90px;left:20px;width:120px;height:120px;border:2px solid rgba(255,255,255,.5);border-radius:50%;z-index:10}
-#stick{position:absolute;width:50px;height:50px;background:yellow;border-radius:50%;left:35px;top:35px;border:2px solid #fff}
-#btns{position:fixed;bottom:90px;right:20px;display:flex;flex-direction:column;gap:12px;z-index:10}
-.btn{width:75px;height:75px;border-radius:50%;border:3px solid #fff;color:#fff;font-weight:bold;display:flex;align-items:center;justify-content:center}
-</style>
-</head>
-<body>
-<div id="ui">
-<div class="box">❤️ HP:<span id="hp">100</span></div>
-<div class="box">💀 Kill:<span id="kill">0</span></div>
-<div class="box">🔫 <span id="ammo">30</span></div>
-</div>
-<canvas id="game"></canvas>
-<div id="joy"><div id="stick"></div></div>
-<div id="btns">
-<div class="btn" id="bomb" style="background:#00cc00">💣</div>
-<div class="btn" id="jump" style="background:#0066ff">JUMP</div>
-<div class="btn" id="shoot" style="background:red">SHOOT</div>
-</div>
-<script>
-var c=document.getElementById('game'),x=c.getContext('2d');
-function rs(){c.width=window.innerWidth;c.height=window.innerHeight}rs();
-window.addEventListener('resize',rs);
-var player={x:80,y:c.height-200,w:32,h:42,hp:100,ammo:30,kills:0,vx:0,vy:0,g:false,hitTimer:0};
-var ens=[],buls=[],jX=0,jY=0,keys={};
-var gr=0;
-function spawn(){ens.push({x:c.width+50,y:c.height-150,w:32,h:42,hp:30,vx:-1.5,vy:0});}
-for(let i=0;i<3;i++)setTimeout(spawn,i*1200);
-function upd(){
- player.vx=jX*4.5;player.x+=player.vx;player.vy+=0.7;player.y+=player.vy;
- var gr=c.height-80;
- if(player.y+player.h>gr){player.y=gr-player.h;player.vy=0;player.g=true}else player.g=false;
- if(player.x<0)player.x=0;if(player.x>c.width-player.w)player.x=c.width-player.w;
- if(player.hitTimer>0)player.hitTimer--;
- ens.forEach(e=>{
-  e.x+=e.vx;e.vy+=0.7;e.y+=e.vy;if(e.y+e.h>gr){e.y=gr-e.h;e.vy=0}
-  if(e.x<-100)e.x=c.width+80;
-  if(player.hitTimer==0 && Math.abs(player.x-e.x)<30 && Math.abs(player.y-e.y)<30){
-   player.hp-=8;player.hitTimer=40;document.getElementById('hp').innerText=player.hp;
-   if(player.hp<=0){alert('Game Over! Kill:'+player.kills);location.reload();}
-  }
- });
- buls.forEach((b,i)=>{
-  b.x+=b.vx;b.y+=b.vy;b.vy+=0.15;
-  ens.forEach((e,j)=>{
-   if(Math.abs(b.x-e.x)<25 && Math.abs(b.y-e.y)<25){
-    e.hp-=20;if(e.hp<=0){ens.splice(j,1);player.kills++;document.getElementById('kill').innerText=player.kills;setTimeout(spawn,1000);}buls.splice(i,1);
-   }
-  });
-  if(b.y>gr || b.x<0 || b.x>c.width)buls.splice(i,1);
- });
-}
-function dr(){
- x.clearRect(0,0,c.width,c.height);
- x.fillStyle='#2d9c3a';x.fillRect(0,c.height-80,c.width,80);
- x.fillStyle=player.hitTimer>0?'red':'#ffcc00';x.fillRect(player.x,player.y,player.w,player.h);
- x.fillStyle='black';x.fillRect(player.x+6,player.y-8,20,6);
- ens.forEach(e=>{x.fillStyle='#ff4444';x.fillRect(e.x,e.y,e.w,e.h);});
- x.fillStyle='yellow';buls.forEach(b=>{x.beginPath();x.arc(b.x,b.y,5,0,Math.PI*2);x.fill();});
- requestAnimationFrame(()=>{upd();dr();});
-}dr();
-// controls
-var joy=document.getElementById('joy'),stick=document.getElementById('stick');
-joy.addEventListener('touchmove',e=>{
- let r=joy.getBoundingClientRect(),t=e.touches[0],dx=t.clientX-(r.left+r.width/2),dy=t.clientY-(r.top+r.height/2),d=Math.sqrt(dx*dx+dy*dy),m=35;
- if(d>m){dx=dx/d*m;dy=dy/d*m;}stick.style.left=35+dx+'px';stick.style.top=35+dy+'px';jX=dx/m;jY=dy/m;
-});
-joy.addEventListener('touchend',()=>{stick.style.left='35px';stick.style.top='35px';jX=0;jY=0;});
-document.getElementById('jump').addEventListener('touchstart',()=>{if(player.g)player.vy=-14;});
-document.getElementById('shoot').addEventListener('touchstart',()=>{
- if(player.ammo>0){player.ammo--;document.getElementById('ammo').innerText=player.ammo;buls.push({x:player.x+player.w,y:player.y+10,vx:8+jX*2,vy:jY*2});}else{player.ammo=30;document.getElementById('ammo').innerText=30;}
-});
-</script>
-</body>
-</html>
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+body{background:#020617;color:#fff;font-family:Arial;text-align:center;overflow:hidden}
+#top{display:flex;justify-content:space-between;padding:12px;background:#0f172a;border-bottom:2px solid #facc15}
+.bar{width:110px;height:14px;background:#334155;border-radius:10px;overflow:hidden;margin-top:4px}
+.fill{height:100%;width:100%}
+#hp1{background:#facc15} #hp2{background:#ef4444}
+canvas{background:#1e293b;display:block;margin:0 auto;border-left:2px solid #333;border-right:2px solid #333}
+#ctrl{position:fixed;bottom:0;left:0;right:0;background:#0f172a;padding:10px;display:flex;justify-content:center;gap:15px;border-top:2px solid #333}
+.btn{width:80px;height:80px;background:#1e293b;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.btn:active{background:#facc15;color:#000}
+#win{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#000;border:3px solid #facc15;padding:20px;border-radius:15px;display:none
