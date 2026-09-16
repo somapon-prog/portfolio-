@@ -2,47 +2,108 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ludo King</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>LUDO KING</title>
 <style>
 body{margin:0;background:#0f172a;color:#fff;text-align:center;font-family:Arial}
-canvas{background:#fff;border:4px solid #fde047;margin:10px auto;display:block;border-radius:10px}
-#dice{font-size:50px;background:#fff;color:#000;width:80px;height:80px;line-height:80px;margin:10px auto;border-radius:15px}
-#msg{color:#fde047;font-weight:bold}
-button{padding:12px 24px;background:#fde047;border:0;border-radius:8px;font-weight:bold}
+h2{color:#fde047;margin:8px}
+#dice{width:90px;height:90px;font-size:45px;background:#fff;border:4px solid #fde047;border-radius:18px;font-weight:bold}
+#msg{margin:8px;font-weight:bold;color:#22c55e}
+canvas{background:#fff;border:4px solid #fde047;border-radius:10px}
+button{padding:10px 20px;background:#fde047;border:0;border-radius:8px;font-weight:bold;margin:5px}
 </style>
 </head>
 <body>
-<h2>🎲 LUDO KING - FINAL 🎲</h2>
-<div id="dice" onclick="roll()">🎲</div>
-<div id="msg">RED Turn - 6 lagbe</div>
-<canvas id="c" width="330" height="330"></canvas>
-<button onclick="roll()">ROLL DICE</button><br><br>
-<a href="../" style="color:#fff">⬅ BACK</a>
+<h2>🎲 LUDO KING - REAL</h2>
+<button id="dice" onclick="roll()">6</button>
+<div id="msg">RED Turn - 6 pele guti ber hobe</div>
+<canvas id="board" width="360" height="360"></canvas>
+<br>
+<button onclick="location.reload()">RESET</button>
+<a href="../" style="color:#fff;background:#333;padding:10px 20px;border-radius:8px;text-decoration:none">BACK</a>
+
 <script>
-let cv=document.getElementById('c'),ctx=cv.getContext('2d'),turn=0,pos=[-1,-1,-1,-1],names=['RED','GREEN','YELLOW','BLUE'],cols=['red','green','gold','blue'];
-let path=[];
-for(let i=1;i<6;i++)path.push([1,i]);for(let i=5;i>=0;i--)path.push([i,6]);path.push([0,7],[0,8]);for(let i=1;i<6;i++)path.push([i,8]);for(let i=9;i<15;i++)path.push([6,i]);path.push([7,14],[8,14]);for(let i=13;i>=9;i--)path.push([8,i]);for(let i=9;i<15;i++)path.push([i,8]);path.push([14,7],[14,6]);for(let i=13;i>=9;i--)path.push([i,6]);for(let i=5;i>=0;i--)path.push([8,i]);path.push([7,0]);
+let c=document.getElementById('board'),ctx=c.getContext('2d');
+let turn=0,dice=6;
+let colors=['RED','GREEN','YELLOW','BLUE'];
+let colCode=['#ef4444','#22c55e','#eab308','#3b82f6'];
+let tokens=[];
+for(let p=0;p<4;p++) for(let t=0;t<4;t++) tokens.push({p:p,t:t,pos:-1,home:true});
+
+function getPos(idx){
+ let x,y,s=24;
+ idx=idx%52;
+ if(idx<5) return {x:6*s+s*idx,y:0}
+ if(idx==5) return {x:11*s,y:s}
+ if(idx<11) return {x:11*s,y:s+s*(idx-5)}
+ if(idx==11) return {x:10*s,y:6*s}
+ if(idx<17) return {x:10*s-s*(idx-11),y:6*s+ s}
+ if(idx==17) return {x:5*s,y:9*s}
+ if(idx<23) return {x:5*s,y:9*s+s*(idx-17)}
+ if(idx==23) return {x:4*s,y:14*s}
+ if(idx<28) return {x:4*s - s*(idx-23),y:14*s}
+ if(idx==28) return {x:0,y:9*s}
+ if(idx<34) return {x:0,y:9*s - s*(idx-28)}
+ if(idx==34) return {x:s,y:6*s+s}
+ if(idx<40) return {x:s+s*(idx-34),y:6*s}
+ if(idx==40) return {x:5*s,y:5*s}
+ if(idx<46) return {x:5*s,y:5*s - s*(idx-40)}
+ if(idx==46) return {x:6*s,y:0}
+ return {x:6*s,y:0}
+}
 
 function draw(){
- ctx.clearRect(0,0,330,330);
- let s=22;
- // home
- ctx.fillStyle='#ef4444';ctx.fillRect(0,0,6*s,6*s);
- ctx.fillStyle='#22c55e';ctx.fillRect(9*s,0,6*s,6*s);
- ctx.fillStyle='#eab308';ctx.fillRect(0,9*s,6*s,6*s);
- ctx.fillStyle='#3b82f6';ctx.fillRect(9*s,9*s,6*s,6*s);
+ ctx.clearRect(0,0,360,360);
+ // homes
+ ctx.fillStyle="#fee2e2";ctx.fillRect(0,0,6*24,6*24);
+ ctx.fillStyle="#dcfce7";ctx.fillRect(9*24,0,6*24,6*24);
+ ctx.fillStyle="#fef9c3";ctx.fillRect(0,9*24,6*24,6*24);
+ ctx.fillStyle="#dbeafe";ctx.fillRect(9*24,9*24,6*24,6*24);
  // path
- ctx.fillStyle='#fff';path.forEach(p=>{ctx.fillRect(p[1]*s,p[0]*s,s,s);ctx.strokeRect(p[1]*s,p[0]*s,s,s)});
+ ctx.fillStyle="#fff";ctx.fillRect(6*24,0,3*24,6*24);ctx.fillRect(9*24,6*24,6*24,3*24);ctx.fillRect(6*24,9*24,3*24,6*24);ctx.fillRect(0,6*24,6*24,3*24);
+ ctx.strokeStyle="#000";for(let i=0;i<=15;i++){ctx.beginPath();ctx.moveTo(i*24,0);ctx.lineTo(i*24,360);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*24);ctx.lineTo(360,i*24);ctx.stroke();}
+ ctx.fillStyle="#fde047";ctx.fillRect(6*24,6*24,3*24,3*24);
+ ctx.fillStyle="#000";ctx.font="bold 20px Arial";ctx.fillText("★",7*24+2,8*24-2);
  // tokens
- for(let i=0;i<4;i++)if(pos[i]>=0){let p=path[pos[i]];ctx.fillStyle=cols[i];ctx.beginPath();ctx.arc(p[1]*s+s/2,p[0]*s+s/2,9,0,Math.PI*2);ctx.fill();ctx.stroke()}
+ tokens.forEach(t=>{
+  let px,py;
+  if(t.pos==-1){
+   px=(t.p==0||t.p==2?1:10)*24 + (t.t%2)*2*24+6;
+   py=(t.p==0||t.p==1?1:10)*24 + Math.floor(t.t/2)*2*24+6;
+  }else{
+   let p=getPos(t.p*13 + t.pos);px=p.x;py=p.y;
+  }
+  t.x=px;t.y=py;
+  ctx.fillStyle=colCode[t.p];ctx.beginPath();ctx.arc(px+12,py+12,10,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#000";ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle="#fff";ctx.font="bold 10px Arial";ctx.fillText(t.t+1,px+8,py+15);
+ });
 }
+
 function roll(){
- let v=Math.floor(Math.random()*6)+1;document.getElementById('dice').innerText=v;
- if(pos[turn]==-1){if(v==6)pos[turn]=0;else{turn=(turn+1)%4;document.getElementById('msg').innerText=names[turn]+' Turn';draw();return;}}
- else{pos[turn]+=v;if(pos[turn]>=path.length){alert(names[turn]+' WIN!');pos=[-1,-1,-1,-1];}}
- draw();if(v!=6)turn=(turn+1)%4;document.getElementById('msg').innerText=names[turn]+' Turn';
+ dice=Math.floor(Math.random()*6)+1;
+ document.getElementById('dice').innerText=dice;
+ document.getElementById('msg').innerText=colors[turn]+" Turn - Dice "+dice+" - Guti te chap dao";
+ let movable=tokens.some(t=>t.p==turn && (t.pos>=0 || dice==6));
+ if(!movable){
+  setTimeout(()=>{turn=(turn+1)%4;document.getElementById('msg').innerText=colors[turn]+" Turn";draw();},1000);
+ }
 }
+
+c.addEventListener('click',e=>{
+ let r=c.getBoundingClientRect();
+ let mx=(e.clientX-r.left)*(360/r.width),my=(e.clientY-r.top)*(360/r.height);
+ tokens.forEach(t=>{
+  if(t.p==turn && Math.abs(t.x+12-mx)<20 && Math.abs(t.y+12-my)<20){
+   if(t.pos==-1 && dice!=6){alert("6 lagbe!");return;}
+   if(t.pos==-1){t.pos=0;} else{t.pos+=dice;}
+   if(t.pos>51) t.pos-=52;
+   draw();
+   if(dice!=6) turn=(turn+1)%4;
+   document.getElementById('msg').innerText=colors[turn]+" Turn";
+  }
+ });
+});
+
 draw();
 </script>
 </body>
