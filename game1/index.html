@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>REAL STICK BOSS</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none}
@@ -10,9 +10,132 @@ body{background:#020617;color:#fff;font-family:Arial;text-align:center;overflow:
 #top{display:flex;justify-content:space-between;padding:12px;background:#0f172a;border-bottom:2px solid #facc15}
 .bar{width:110px;height:14px;background:#334155;border-radius:10px;overflow:hidden;margin-top:4px}
 .fill{height:100%;width:100%}
-#hp1{background:#facc15} #hp2{background:#ef4444}
-canvas{background:#1e293b;display:block;margin:0 auto;border-left:2px solid #333;border-right:2px solid #333}
+#hp1{background:#facc15}
+#hp2{background:#ef4444}
+canvas{background:#1e293b;display:block;margin:0 auto}
 #ctrl{position:fixed;bottom:0;left:0;right:0;background:#0f172a;padding:10px;display:flex;justify-content:center;gap:15px;border-top:2px solid #333}
 .btn{width:80px;height:80px;background:#1e293b;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
 .btn:active{background:#facc15;color:#000}
-#win{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#000;border:3px solid #facc15;padding:20px;border-radius:15px;display:none
+#win{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#000;border:3px solid #facc15;padding:20px;border-radius:15px;display:none;z-index:99;width:80%}
+</style>
+</head>
+<body>
+<div id="top">
+<div>YOU<div class="bar"><div id="hp1" class="fill"></div></div></div>
+<div style="color:#facc15;font-weight:bold">VS</div>
+<div>BOSS<div class="bar"><div id="hp2" class="fill"></div></div></div>
+</div>
+<canvas id="g" width="400" height="500"></canvas>
+<div id="ctrl">
+<div class="btn" id="p1">PUNCH</div>
+<div class="btn" id="k1">KICK</div>
+<div class="btn" id="b1">BLOCK</div>
+</div>
+<div id="win">
+<h2 id="wt"></h2>
+<p id="ws" style="margin:10px 0;color:#aaa"></p>
+<button onclick="location.reload()" style="padding:10px 20px;background:#facc15;border:0;border-radius:8px;font-weight:bold">AGAIN</button>
+<br><br>
+<a href="../" style="color:#fff;border:1px solid #fff;padding:5px 10px;text-decoration:none;border-radius:5px">HOME</a>
+</div>
+<script>
+const cv=document.getElementById('g');
+const cx=cv.getContext('2d');
+let pl={x:90,y:360,hp:100,s:'i',t:0,d:1,v:0};
+let bs={x:300,y:360,hp:100,s:'i',t:0,d:-1,v:0};
+let sh=0;
+let over=false;
+
+function draw(p,col){
+ cx.save();
+ cx.translate(p.x,p.y);
+ if(p.s=='h') cx.translate((Math.random()-0.5)*sh,(Math.random()-0.5)*sh);
+ cx.strokeStyle=col;
+ cx.lineWidth=4;
+ cx.lineCap='round';
+ cx.beginPath(); cx.arc(0,-60,17,0,7); cx.stroke();
+ cx.beginPath(); cx.moveTo(0,-43); cx.lineTo(0,10); cx.stroke();
+ let aL=p.s=='p'?30+p.t*1.5:22;
+ cx.beginPath();
+ if(p.d==1){
+   cx.moveTo(0,-32);cx.lineTo(aL,-25);
+   if(p.s=='p'){cx.moveTo(aL,-25);cx.lineTo(aL+12,-25)}
+ } else {
+   cx.moveTo(0,-32);cx.lineTo(-aL,-25);
+   if(p.s=='p'){cx.moveTo(-aL,-25);cx.lineTo(-aL-12,-25)}
+ }
+ cx.stroke();
+ cx.beginPath(); cx.moveTo(0,-32); cx.lineTo(p.d*-10,-8); cx.stroke();
+ cx.beginPath(); cx.moveTo(0,10); cx.lineTo(-12,50); cx.moveTo(0,10);
+ if(p.s=='k') cx.lineTo(26,38); else cx.lineTo(12,50);
+ cx.stroke();
+ cx.restore();
+}
+
+function loop(){
+ if(over) return;
+ cx.clearRect(0,0,400,500);
+ cx.fillStyle='#334155';
+ cx.fillRect(0,430,400,5);
+ pl.v*=0.85; bs.v*=0.85;
+ pl.x+=pl.v; bs.x+=bs.v;
+ pl.x=Math.max(30,Math.min(370,pl.x));
+ bs.x=Math.max(30,Math.min(370,bs.x));
+ 
+ if(bs.s=='i' && Math.random()<0.03){
+  if(Math.abs(pl.x-bs.x)>70){
+    bs.d=pl.x>bs.x?1:-1; bs.v+=bs.d*0.5;
+  } else {
+    bs.s=Math.random()<0.6?'p':'k'; bs.t=0;
+  }
+ }
+ 
+ if((bs.s=='p'||bs.s=='k') && ++bs.t>15){
+  if(Math.abs(pl.x-bs.x)<60 && pl.s!='b'){
+    pl.hp-=12; pl.s='h'; pl.v=bs.d*-6; sh=10;
+  }
+  bs.s='i'; bs.t=0;
+ }
+ 
+ if((pl.s=='p'||pl.s=='k') && ++pl.t>12){
+  if(Math.abs(pl.x-bs.x)<60){
+    bs.hp-=16; bs.s='h'; bs.v=pl.d*7; sh=14;
+    setTimeout(()=>{if(bs.s=='h')bs.s='i'},150);
+  }
+  pl.s='i'; pl.t=0;
+ }
+ 
+ draw(bs,'#ef4444');
+ draw(pl,'#fff');
+ 
+ document.getElementById('hp1').style.width=pl.hp+'%';
+ document.getElementById('hp2').style.width=bs.hp+'%';
+ 
+ if(pl.hp<=0||bs.hp<=0){
+  over=true;
+  document.getElementById('win').style.display='block';
+  document.getElementById('wt').innerText=pl.hp<=0?'BOSS WIN':'YOU WIN - REAL KING!';
+ } else {
+  requestAnimationFrame(loop);
+ }
+ if(sh>0) sh--;
+}
+
+function bind(id,fn){
+ const e=document.getElementById(id);
+ e.addEventListener('touchstart',ev=>{ev.preventDefault();fn()});
+ e.addEventListener('mousedown',fn);
+}
+bind('p1',()=>{if(pl.s=='i'){pl.s='p';pl.t=0;pl.d=bs.x>pl.x?1:-1}});
+bind('k1',()=>{if(pl.s=='i'){pl.s='k';pl.t=0;pl.d=bs.x>pl.x?1:-1}});
+
+const bb=document.getElementById('b1');
+bb.addEventListener('touchstart',e=>{e.preventDefault();pl.s='b'});
+bb.addEventListener('touchend',e=>{e.preventDefault();pl.s='i'});
+bb.addEventListener('mousedown',()=>pl.s='b');
+bb.addEventListener('mouseup',()=>pl.s='i');
+
+loop();
+</script>
+</body>
+</html>
