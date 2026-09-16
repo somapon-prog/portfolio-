@@ -1,33 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Car Racing</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Car Racing Fixed</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0f172a;color:#fff;font-family:Arial;overflow:hidden}
-#top{padding:10px;background:#1e293b;display:flex;justify-content:space-between}
+#top{height:50px;background:#1e293b;display:flex;justify-content:space-between;align-items:center;padding:0 15px;position:fixed;top:0;width:100%;z-index:10}
 #top a{color:#22c55e;text-decoration:none;font-weight:bold}
-#canvas{display:block;margin:0 auto;background:#1a2332;width:100%;max-width:400px;height:calc(100vh - 50px)}
-#controls{position:fixed;bottom:10px;width:100%;display:flex;justify-content:space-between;padding:0 20px;max-width:400px;left:50%;transform:translateX(-50%)}
-.btn{width:70px;height:70px;background:#ffffff22;border:2px solid #fff4;border-radius:50%;font-size:28px;display:flex;align-items:center;justify-content:center}
+#wrap{margin-top:50px;display:flex;justify-content:center}
+canvas{background:#334155}
+#controls{position:fixed;bottom:20px;width:100%;display:flex;justify-content:space-between;padding:0 30px}
+.btn{width:75px;height:75px;background:rgba(255,255,255,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid #fff}
 </style>
 </head>
 <body>
-<div id="top"><a href="../">⬅️ Hub</a><div id="score">SCORE: 0</div><div>🏎️</div></div>
-<canvas id="canvas"></canvas>
-<div id="controls"><div class="btn" id="left">⬅️</div><div class="btn" id="right">➡️</div></div>
+<div id="top"><a href="../">⬅ Hub</a><div id="score">SCORE:0</div><div>🏎️</div></div>
+<div id="wrap"><canvas id="c" width="360" height="600"></canvas></div>
+<div id="controls"><div class="btn" id="L">⬅️</div><div class="btn" id="R">➡️</div></div>
 <script>
-const c=document.getElementById('canvas'),x=c.getContext('2d');
-c.width=400;c.height=window.innerHeight-50;
-let car={x:170,y:0,w:60,h:100,speed:6},keys={},score=0,enemies=[],last=0;
-car.y=c.height-car.h-20;
-function spawn(){enemies.push({x:Math.random()*260,y:-120,w:60,h:100,color:`hsl(${Math.random()*360},80%,60%)`,s:3+Math.random()*3})}
-function update(){
-if(keys.ArrowLeft)car.x-=car.speed;
-if(keys.ArrowRight)car.x+=car.speed;
-car.x=Math.max(0,Math.min(320,car.x));
-if(Date.now()-last>700){spawn();last=Date.now()}
-enemies.forEach(e=>e.y+=e.s);
-enemies=enemies.filter(e=>e.y<c.height+100);
-for(let e of enemies){if(car.x<e
+const c=document.getElementById('c'),x=c.getContext('2d');
+let car={x:155,y:480,w:50,h:80,s:6},keys={},en=[],sc=0,last=0;
+function spawn(){en.push({x:Math.random()*260+20,y:-100,w:50,h:80,sp:3+Math.random()*3,c:'hsl('+Math.random()*360+',90%,60%)'})}
+function loop(t){
+x.fillStyle='#334155';x.fillRect(0,0,360,600);
+x.fillStyle='#1e293b';x.fillRect(0,0,25,600);x.fillRect(335,0,25,600);
+x.strokeStyle='#fff';x.setLineDash([20,20]);x.beginPath();x.moveTo(180,0);x.lineTo(180,600);x.stroke();x.setLineDash([]);
+if(keys.l)car.x-=car.s;if(keys.r)car.x+=car.s;
+car.x=Math.max(25,Math.min(285,car.x));
+if(t-last>800){spawn();last=t;}
+en.forEach(e=>e.y+=e.sp);en=en.filter(e=>e.y<650);
+for(let e of en){if(car.x<e.x+e.w&&car.x+car.w>e.x&&car.y<e.y+e.h&&car.y+car.h>e.y){alert('Game Over Score:'+sc);en=[];sc=0;car.x=155;break;}}
+sc++;document.getElementById('score').innerText='SCORE:'+sc;
+en.forEach(e=>{x.fillStyle=e.c;x.fillRect(e.x,e.y,e.w,e.h)});
+x.fillStyle='#22c55e';x.fillRect(car.x,car.y,car.w,car.h);
+requestAnimationFrame(loop);
+}
+loop(0);
+function bind(id,k){let b=document.getElementById(id);b.addEventListener('touchstart',e=>{e.preventDefault();keys[k]=true});b.addEventListener('touchend',()=>keys[k]=false);b.addEventListener('mousedown',()=>keys[k]=true);b.addEventListener('mouseup',()=>keys[k]=false);}
+bind('L','l');bind('R','r');
+addEventListener('keydown',e=>{if(e.key=='ArrowLeft')keys.l=true;if(e.key=='ArrowRight')keys.r=true});
+addEventListener('keyup',e=>{if(e.key=='ArrowLeft')keys.l=false;if(e.key=='ArrowRight')keys.r=false});
+</script>
+</body>
+</html>
