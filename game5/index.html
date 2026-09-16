@@ -2,108 +2,118 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>LUDO KING</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>LUDO KING PRO</title>
 <style>
-body{margin:0;background:#0f172a;color:#fff;text-align:center;font-family:Arial}
-h2{color:#fde047;margin:8px}
-#dice{width:90px;height:90px;font-size:45px;background:#fff;border:4px solid #fde047;border-radius:18px;font-weight:bold}
-#msg{margin:8px;font-weight:bold;color:#22c55e}
-canvas{background:#fff;border:4px solid #fde047;border-radius:10px}
-button{padding:10px 20px;background:#fde047;border:0;border-radius:8px;font-weight:bold;margin:5px}
+body{margin:0;background:#0f172a;color:#fff;text-align:center;font-family:Arial;touch-action:manipulation}
+h2{color:#fde047;margin:6px}
+#dice{width:100px;height:100px;font-size:50px;background:#fff;border:5px solid #fde047;border-radius:20px;font-weight:bold}
+#msg{margin:8px;font-weight:bold;color:#22c55e;font-size:16px}
+canvas{background:#fff;border:4px solid #fde047;border-radius:12px;max-width:95vw}
+button{padding:12px 22px;background:#fde047;border:0;border-radius:10px;font-weight:bold;margin:6px;font-size:16px}
 </style>
 </head>
 <body>
-<h2>🎲 LUDO KING - REAL</h2>
-<button id="dice" onclick="roll()">6</button>
-<div id="msg">RED Turn - 6 pele guti ber hobe</div>
-<canvas id="board" width="360" height="360"></canvas>
-<br>
-<button onclick="location.reload()">RESET</button>
-<a href="../" style="color:#fff;background:#333;padding:10px 20px;border-radius:8px;text-decoration:none">BACK</a>
-
+<h2>🎲 LUDO KING PRO</h2>
+<button id="dice" onclick="rollDice()">6</button>
+<div id="msg">RED Turn - DICE chap dao, 6 pele guti ber hobe</div>
+<canvas id="b" width="450" height="450"></canvas><br>
+<button onclick="resetGame()">RESET</button>
+<a href="../" style="color:#fff;background:#333;padding:12px 22px;border-radius:10px;text-decoration:none;display:inline-block;margin:6px">BACK</a>
 <script>
-let c=document.getElementById('board'),ctx=c.getContext('2d');
-let turn=0,dice=6;
-let colors=['RED','GREEN','YELLOW','BLUE'];
-let colCode=['#ef4444','#22c55e','#eab308','#3b82f6'];
-let tokens=[];
-for(let p=0;p<4;p++) for(let t=0;t<4;t++) tokens.push({p:p,t:t,pos:-1,home:true});
+const canvas=document.getElementById('b'),ctx=canvas.getContext('2d');
+const S=30; // size
+const colors=['RED','GREEN','YELLOW','BLUE'];
+const col=['#ef4444','#22c55e','#eab308','#3b82f6'];
+let turn=0,dice=6,selected=-1;
 
-function getPos(idx){
- let x,y,s=24;
- idx=idx%52;
- if(idx<5) return {x:6*s+s*idx,y:0}
- if(idx==5) return {x:11*s,y:s}
- if(idx<11) return {x:11*s,y:s+s*(idx-5)}
- if(idx==11) return {x:10*s,y:6*s}
- if(idx<17) return {x:10*s-s*(idx-11),y:6*s+ s}
- if(idx==17) return {x:5*s,y:9*s}
- if(idx<23) return {x:5*s,y:9*s+s*(idx-17)}
- if(idx==23) return {x:4*s,y:14*s}
- if(idx<28) return {x:4*s - s*(idx-23),y:14*s}
- if(idx==28) return {x:0,y:9*s}
- if(idx<34) return {x:0,y:9*s - s*(idx-28)}
- if(idx==34) return {x:s,y:6*s+s}
- if(idx<40) return {x:s+s*(idx-34),y:6*s}
- if(idx==40) return {x:5*s,y:5*s}
- if(idx<46) return {x:5*s,y:5*s - s*(idx-40)}
- if(idx==46) return {x:6*s,y:0}
- return {x:6*s,y:0}
-}
+// 0-51 track
+let track=[];
+for(let i=0;i<6;i++) track.push({x:6,y:i});
+for(let i=1;i<6;i++) track.push({x:6+i,y:6});
+track.push({x:12,y:6}); track.push({x:13,y:6}); track.push({x:14,y:6});
+for(let i=1;i<6;i++) track.push({x:14,y:6+i});
+track.push({x:14,y:12}); track.push({x:14,y:13}); track.push({x:14,y:14});
+for(let i=1;i<6;i++) track.push({x:14-i,y:14});
+track.push({x:8,y:14}); track.push({x:7,y:14}); track.push({x:6,y:14});
+for(let i=1;i<6;i++) track.push({x:6,y:14-i});
+track.push({x:6,y:8}); track.push({x:6,y:7}); track.push({x:6,y:6});
+// Fix start points
+// RED start at 0, GREEN at 13, YELLOW at 26, BLUE at 39
+const starts=[0,13,26,39];
+let tokens=[];
+for(let p=0;p<4;p++) for(let t=0;t<4;t++) tokens.push({p:p,id:t,pos:-1});
 
 function draw(){
- ctx.clearRect(0,0,360,360);
+ ctx.clearRect(0,0,450,450);
  // homes
- ctx.fillStyle="#fee2e2";ctx.fillRect(0,0,6*24,6*24);
- ctx.fillStyle="#dcfce7";ctx.fillRect(9*24,0,6*24,6*24);
- ctx.fillStyle="#fef9c3";ctx.fillRect(0,9*24,6*24,6*24);
- ctx.fillStyle="#dbeafe";ctx.fillRect(9*24,9*24,6*24,6*24);
- // path
- ctx.fillStyle="#fff";ctx.fillRect(6*24,0,3*24,6*24);ctx.fillRect(9*24,6*24,6*24,3*24);ctx.fillRect(6*24,9*24,3*24,6*24);ctx.fillRect(0,6*24,6*24,3*24);
- ctx.strokeStyle="#000";for(let i=0;i<=15;i++){ctx.beginPath();ctx.moveTo(i*24,0);ctx.lineTo(i*24,360);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*24);ctx.lineTo(360,i*24);ctx.stroke();}
- ctx.fillStyle="#fde047";ctx.fillRect(6*24,6*24,3*24,3*24);
- ctx.fillStyle="#000";ctx.font="bold 20px Arial";ctx.fillText("★",7*24+2,8*24-2);
+ ctx.fillStyle='#fee2e2';ctx.fillRect(0,0,6*S,6*S);
+ ctx.fillStyle='#dcfce7';ctx.fillRect(9*S,0,6*S,6*S);
+ ctx.fillStyle='#fef9c3';ctx.fillRect(0,9*S,6*S,6*S);
+ ctx.fillStyle='#dbeafe';ctx.fillRect(9*S,9*S,6*S,6*S);
+ // path white
+ ctx.fillStyle='#fff';
+ ctx.fillRect(6*S,0,3*S,6*S);ctx.fillRect(9*S,6*S,6*S,3*S);ctx.fillRect(6*S,9*S,3*S,6*S);ctx.fillRect(0,6*S,6*S,3*S);
+ // grid
+ ctx.strokeStyle='#222';ctx.lineWidth=1;
+ for(let i=0;i<=15;i++){ctx.beginPath();ctx.moveTo(i*S,0);ctx.lineTo(i*S,450);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*S);ctx.lineTo(450,i*S);ctx.stroke();}
+ // center
+ ctx.fillStyle='#fde047';ctx.fillRect(6*S,6*S,3*S,3*S);
+ ctx.fillStyle='#000';ctx.font='bold 32px Arial';ctx.fillText('★',6.7*S,8.2*S);
+ // safe marks
+ [[6,1],[12,6],[14,8],[8,14],[6,12],[2,6]].forEach(p=>{ctx.fillStyle='#fff';ctx.strokeStyle='#000';ctx.beginPath();ctx.arc(p[0]*S+S/2,p[1]*S+S/2,4,0,Math.PI*2);ctx.fill();ctx.stroke();});
  // tokens
- tokens.forEach(t=>{
+ tokens.forEach((tok,i)=>{
   let px,py;
-  if(t.pos==-1){
-   px=(t.p==0||t.p==2?1:10)*24 + (t.t%2)*2*24+6;
-   py=(t.p==0||t.p==1?1:10)*24 + Math.floor(t.t/2)*2*24+6;
-  }else{
-   let p=getPos(t.p*13 + t.pos);px=p.x;py=p.y;
+  if(tok.pos==-1){
+   let bx = (tok.p==0||tok.p==2?0.8:9.8), by=(tok.p==0||tok.p==1?0.8:9.8);
+   px = (bx + (tok.id%2)*2.5)*S; py=(by+ Math.floor(tok.id/2)*2.5)*S;
+  } else {
+   let idx = (starts[tok.p]+tok.pos)%52;
+   px=track[idx].x*S; py=track[idx].y*S;
   }
-  t.x=px;t.y=py;
-  ctx.fillStyle=colCode[t.p];ctx.beginPath();ctx.arc(px+12,py+12,10,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#000";ctx.lineWidth=2;ctx.stroke();
-  ctx.fillStyle="#fff";ctx.font="bold 10px Arial";ctx.fillText(t.t+1,px+8,py+15);
+  tok.x=px; tok.y=py;
+  ctx.fillStyle=col[tok.p];
+  ctx.beginPath();ctx.arc(px+S/2,py+S/2,12,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle= i==selected?'#fff':'#000';ctx.lineWidth= i==selected?4:2;ctx.stroke();
+  ctx.fillStyle='#fff';ctx.font='bold 12px Arial';ctx.fillText(tok.id+1,px+S/2-4,py+S/2+4);
  });
 }
-
-function roll(){
+function rollDice(){
  dice=Math.floor(Math.random()*6)+1;
  document.getElementById('dice').innerText=dice;
- document.getElementById('msg').innerText=colors[turn]+" Turn - Dice "+dice+" - Guti te chap dao";
- let movable=tokens.some(t=>t.p==turn && (t.pos>=0 || dice==6));
- if(!movable){
-  setTimeout(()=>{turn=(turn+1)%4;document.getElementById('msg').innerText=colors[turn]+" Turn";draw();},1000);
+ let canMove=tokens.some(t=>t.p==turn && (t.pos>=0 || dice==6));
+ document.getElementById('msg').innerText=colors[turn]+' - '+dice+' porse - guti chap dao';
+ if(!canMove){
+  document.getElementById('msg').innerText=colors[turn]+' chal nai, next '+colors[(turn+1)%4];
+  setTimeout(()=>{turn=(turn+1)%4;document.getElementById('msg').innerText=colors[turn]+' Turn - DICE chap dao';draw();},1000);
  }
+ draw();
 }
-
-c.addEventListener('click',e=>{
- let r=c.getBoundingClientRect();
- let mx=(e.clientX-r.left)*(360/r.width),my=(e.clientY-r.top)*(360/r.height);
- tokens.forEach(t=>{
-  if(t.p==turn && Math.abs(t.x+12-mx)<20 && Math.abs(t.y+12-my)<20){
-   if(t.pos==-1 && dice!=6){alert("6 lagbe!");return;}
-   if(t.pos==-1){t.pos=0;} else{t.pos+=dice;}
-   if(t.pos>51) t.pos-=52;
-   draw();
+canvas.addEventListener('click',e=>{
+ const r=canvas.getBoundingClientRect();
+ const mx=(e.clientX-r.left)*(450/r.width), my=(e.clientY-r.top)*(450/r.height);
+ tokens.forEach((tok,i)=>{
+  if(tok.p!=turn) return;
+  if(Math.abs(tok.x+S/2-mx)<20 && Math.abs(tok.y+S/2-my)<20){
+   if(tok.pos==-1 && dice!=6){document.getElementById('msg').innerText='6 lagbe guti ber korte!';return;}
+   if(tok.pos==-1) tok.pos=0; else tok.pos+=dice;
+   // cut
+   tokens.forEach(ot=>{
+    if(ot.p!=tok.p && ot.pos>=0){
+     let idx1=(starts[tok.p]+tok.pos)%52, idx2=(starts[ot.p]+ot.pos)%52;
+     if(idx1==idx2){ot.pos=-1;document.getElementById('msg').innerText=colors[tok.p]+' katse '+colors[ot.p]+' ke!';}
+    }
+   });
+   if(tok.pos>50){tok.pos=50;document.getElementById('msg').innerText=colors[tok.p]+' WIN!';}
+   selected=-1;
    if(dice!=6) turn=(turn+1)%4;
-   document.getElementById('msg').innerText=colors[turn]+" Turn";
+   document.getElementById('msg').innerText=colors[turn]+' Turn';
+   draw();
   }
  });
 });
-
+function resetGame(){tokens.forEach(t=>t.pos=-1);turn=0;draw();}
 draw();
 </script>
 </body>
