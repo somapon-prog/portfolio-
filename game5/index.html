@@ -1,96 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ludo King - SomaPon</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ludo King</title>
 <style>
-body{margin:0;background:#0f172a;color:#fff;font-family:Arial;text-align:center;padding:10px}
-h2{color:#fde047}
-#board{width:330px;height:330px;background:#fff;border:4px solid #000;margin:15px auto;display:grid;grid-template-columns:repeat(15,1fr);grid-template-rows:repeat(15,1fr);border-radius:8px;overflow:hidden}
-.cell{border:0.5px solid #e5e7eb;display:flex;align-items:center;justify-content:center}
-.R{background:#ef4444}.G{background:#22c55e}.Y{background:#eab308}.B{background:#3b82f6}
-.path{background:#fff!important;border:1px solid #cbd5e1!important}
-#dice{font-size:45px;background:#fff;color:#000;width:80px;height:80px;line-height:80px;margin:10px auto;border:4px solid #fde047;border-radius:15px;cursor:pointer;user-select:none}
+body{margin:0;background:#0f172a;color:#fff;text-align:center;font-family:Arial}
+canvas{background:#fff;border:4px solid #fde047;margin:10px auto;display:block;border-radius:10px}
+#dice{font-size:50px;background:#fff;color:#000;width:80px;height:80px;line-height:80px;margin:10px auto;border-radius:15px}
 #msg{color:#fde047;font-weight:bold}
-.token{width:16px;height:16px;border-radius:50%;border:2px solid #000;box-shadow:0 0 3px #000}
-button{padding:12px 28px;background:#fde047;color:#000;border:0;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px}
-a.back{display:inline-block;margin-top:15px;background:#334155;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none}
+button{padding:12px 24px;background:#fde047;border:0;border-radius:8px;font-weight:bold}
 </style>
 </head>
 <body>
-<h2>🎲 11. LUDO KING 🎲</h2>
-<div id="dice" onclick="rollDice()">🎲</div>
-<h3 id="msg">RED er chalan - 6 porle guti ber hobe</h3>
-<div id="board"></div>
-<button onclick="rollDice()">ROLL DICE</button><br>
-<a class="back" href="../">⬅ Back to Portfolio</a>
-
+<h2>🎲 LUDO KING - FINAL 🎲</h2>
+<div id="dice" onclick="roll()">🎲</div>
+<div id="msg">RED Turn - 6 lagbe</div>
+<canvas id="c" width="330" height="330"></canvas>
+<button onclick="roll()">ROLL DICE</button><br><br>
+<a href="../" style="color:#fff">⬅ BACK</a>
 <script>
-let board = document.getElementById('board');
-let turn = 0;
-let pos = [-1,-1,-1,-1];
-let colors = ['#ef4444','#22c55e','#eab308','#3b82f6'];
-let names = ['RED','GREEN','YELLOW','BLUE'];
+let cv=document.getElementById('c'),ctx=cv.getContext('2d'),turn=0,pos=[-1,-1,-1,-1],names=['RED','GREEN','YELLOW','BLUE'],cols=['red','green','gold','blue'];
+let path=[];
+for(let i=1;i<6;i++)path.push([1,i]);for(let i=5;i>=0;i--)path.push([i,6]);path.push([0,7],[0,8]);for(let i=1;i<6;i++)path.push([i,8]);for(let i=9;i<15;i++)path.push([6,i]);path.push([7,14],[8,14]);for(let i=13;i>=9;i--)path.push([8,i]);for(let i=9;i<15;i++)path.push([i,8]);path.push([14,7],[14,6]);for(let i=13;i>=9;i--)path.push([i,6]);for(let i=5;i>=0;i--)path.push([8,i]);path.push([7,0]);
 
-for(let r=0;r<15;r++){
-  for(let c=0;c<15;c++){
-    let d = document.createElement('div');
-    d.className = 'cell';
-    d.id = 'r'+r+'c'+c;
-    if(r<6 && c<6) d.classList.add('R');
-    if(r<6 && c>8) d.classList.add('G');
-    if(r>8 && c<6) d.classList.add('Y');
-    if(r>8 && c>8) d.classList.add('B');
-    board.appendChild(d);
-  }
+function draw(){
+ ctx.clearRect(0,0,330,330);
+ let s=22;
+ // home
+ ctx.fillStyle='#ef4444';ctx.fillRect(0,0,6*s,6*s);
+ ctx.fillStyle='#22c55e';ctx.fillRect(9*s,0,6*s,6*s);
+ ctx.fillStyle='#eab308';ctx.fillRect(0,9*s,6*s,6*s);
+ ctx.fillStyle='#3b82f6';ctx.fillRect(9*s,9*s,6*s,6*s);
+ // path
+ ctx.fillStyle='#fff';path.forEach(p=>{ctx.fillRect(p[1]*s,p[0]*s,s,s);ctx.strokeRect(p[1]*s,p[0]*s,s,s)});
+ // tokens
+ for(let i=0;i<4;i++)if(pos[i]>=0){let p=path[pos[i]];ctx.fillStyle=cols[i];ctx.beginPath();ctx.arc(p[1]*s+s/2,p[0]*s+s/2,9,0,Math.PI*2);ctx.fill();ctx.stroke()}
 }
-
-let path = [[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[7,1]];
-
-path.forEach(p=>{
-  let el = document.getElementById('r'+p[0]+'c'+p[1]);
-  if(el) el.classList.add('path');
-});
-
-function drawToken(){
-  document.querySelectorAll('.token').forEach(e=>e.remove());
-  for(let i=0;i<4;i++){
-    if(pos[i]>=0 && pos[i]<path.length){
-      let rc = path[pos[i]];
-      let cell = document.getElementById('r'+rc[0]+'c'+rc[1]);
-      let dot = document.createElement('div');
-      dot.className = 'token';
-      dot.style.background = colors[i];
-      cell.appendChild(dot);
-    }
-  }
+function roll(){
+ let v=Math.floor(Math.random()*6)+1;document.getElementById('dice').innerText=v;
+ if(pos[turn]==-1){if(v==6)pos[turn]=0;else{turn=(turn+1)%4;document.getElementById('msg').innerText=names[turn]+' Turn';draw();return;}}
+ else{pos[turn]+=v;if(pos[turn]>=path.length){alert(names[turn]+' WIN!');pos=[-1,-1,-1,-1];}}
+ draw();if(v!=6)turn=(turn+1)%4;document.getElementById('msg').innerText=names[turn]+' Turn';
 }
-
-function rollDice(){
-  let v = Math.floor(Math.random()*6)+1;
-  document.getElementById('dice').innerText = v;
-
-  if(pos[turn]==-1){
-    if(v==6){
-      pos[turn]=0;
-    } else {
-      turn=(turn+1)%4;
-      document.getElementById('msg').innerText = names[turn]+" er chalan";
-      return;
-    }
-  } else {
-    pos[turn]+=v;
-    if(pos[turn]>=path.length){
-      alert(names[turn]+" WINNER! 🏆");
-      pos=[-1,-1,-1,-1];
-    }
-  }
-  drawToken();
-  if(v!=6) turn=(turn+1)%4;
-  document.getElementById('msg').innerText = names[turn]+" er chalan - "+ (pos[turn]==-1? "6 lagbe" : "");
-}
-drawToken();
+draw();
 </script>
 </body>
 </html>
