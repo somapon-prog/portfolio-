@@ -1,39 +1,24 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MOTO X3M REAL</title><style>*{margin:0;padding:0;touch-action:none}body{background:#87CEEB;overflow:hidden}canvas{display:block}#h{position:absolute;top:8px;left:8px;background:#0009;color:#fff;padding:6px 12px;border-radius:20px;font-family:sans-serif;font-weight:bold}#p{position:absolute;bottom:0;width:100%;display:flex;justify-content:space-between;padding:10px}.b{width:70px;height:70px;background:#0007;border:2px solid #fff;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px}</style></head><body><div id="h">REAL MOTO X3M - <span id="t">00:00</span></div><canvas id="c"></canvas><div id="p"><div style="display:flex;gap:10px"><div class="b" id="L">◀</div><div class="b" id="R">▶</div></div><div style="display:flex;gap:10px"><div class="b" id="B">⏪</div><div class="b" id="G">⏩</div></div></div><script>
-c=document.getElementById('c');x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
-let bike={x:100,y:0,vx:0,vy:0,a:0,va:0},k={},tm=0,g=[];
-for(let i=0;i<600;i++){let X=i*60,Y=480;if(i>10&&i<20)Y-=(i-10)*30;if(i>=20&&i<25)Y=180;if(i>=25&&i<32)Y=180+(i-25)*38;g.push({x:X,y:Y})}
-function GY(X){let i=Math.floor(X/60);if(i<0||i>=599)return 500;let p=g[i],n=g[i+1],t=(X-p.x)/60;return p.y+t*(n.y-p.y)}
-function GA(X){return Math.atan2(GY(X+20)-GY(X-20),40)}
-function loop(){
-tm+=0.016;if(k.g)bike.vx+=0.38;if(k.b)bike.vx-=0.38;if(k.l)bike.va-=0.13;if(k.r)bike.va+=0.13;
-bike.vy+=0.9;bike.x+=bike.vx;bike.y+=bike.vy;bike.a+=bike.va;bike.va*=0.95;bike.vx*=0.987;
-let gy=GY(bike.x);if(bike.y+26>=gy){bike.y=gy-26;bike.vy=0;let an=GA(bike.x);bike.a+=(an-bike.a)*0.18}
-let cam=bike.x-120;
-x.fillStyle='#87CEEB';x.fillRect(0,0,c.width,c.height);
-x.save();x.translate(-cam,0);
-x.strokeStyle='#5D4037';x.lineWidth=15;x.beginPath();g.forEach((p,i)=>{i?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y)});x.stroke();
-x.fillStyle='#8D6E63';x.beginPath();x.moveTo(0,800);g.forEach(p=>x.lineTo(p.x,p.y));x.lineTo(g[599].x,800);x.fill();
-x.fillStyle='#000';x.fillRect(30000,0,150,150);x.fillStyle='#FF0';x.font='bold 22px sans-serif';x.fillText('FINISH',30010,170);
-x.save();x.translate(bike.x,bike.y);x.rotate(bike.a);
-// wheels black
-x.fillStyle='#111';x.beginPath();x.arc(-24,14,15,0,7);x.fill();x.beginPath();x.arc(26,14,15,0,7);x.fill();
-x.fillStyle='#999';x.beginPath();x.arc(-24,14,5,0,7);x.fill();x.beginPath();x.arc(26,14,5,0,7);x.fill();
-// REAL RIDER - Orange + Blue Goggles + Green Boots (Tomar Photo)
-x.fillStyle='#2E7D32';x.fillRect(-13,1,8,18); // green boot
-x.fillStyle='#FF6F00';x.fillRect(-15,-19,20,20); // orange suit
-x.fillStyle='#FF6F00';x.fillRect(0,-19,18,5); // hand
-x.fillStyle='#FFCC80';x.fillRect(15,-19,6,6);
-// helmet orange black
-x.fillStyle='#111';x.beginPath();x.arc(3,-30,12,0,7);x.fill();
-x.fillStyle='#FF6F00';x.beginPath();x.arc(3,-30,10,0,7);x.fill();
-// blue goggles - REAL
-x.fillStyle='#0D47A1';x.fillRect(-2,-34,14,7);x.fillStyle='#42A5F5';x.fillRect(0,-33,10,3);
-x.restore();x.restore();
-document.getElementById('t').innerText=Math.floor(tm/60)+':'+String(Math.floor(tm%60)).padStart(2,'0');
-if(bike.x>30000){alert('WIN! 🏆');location.reload()}
-if(bike.y>700){bike.x-=80;bike.y=0;bike.vx=0}
-requestAnimationFrame(loop)
-}
-function btn(id,key){let e=document.getElementById(id);e.ontouchstart=e.onmousedown=ev=>{ev.preventDefault();k[key]=1};e.ontouchend=e.onmouseup=()=>k[key]=0}
-btn('G','g');btn('B','b');btn('L','l');btn('R','r');loop();
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Karnafuli Rider - Somapon Edition</title><style>*{margin:0;padding:0;box-sizing:border-box;touch-action:none;font-family:Arial}body{background:#7ec8e3;overflow:hidden}canvas{display:block}#hud{position:absolute;top:0;left:0;right:0;background:#000c;color:#fff;display:flex;justify-content:space-between;padding:6px 10px;font-weight:bold;z-index:10}#shop{position:absolute;top:50px;left:50%;transform:translateX(-50%);width:92%;max-width:380px;max-height:75vh;background:#111e;border:2px solid #ff6d00;border-radius:16px;padding:12px;display:none;overflow:auto;z-index:20}#shop h2{color:#ff6d00;text-align:center}.bike{display:flex;justify-content:space-between;align-items:center;background:#fff1;padding:8px;margin:6px 0;border-radius:10px;color:#fff}.bike button{padding:6px 10px;border:none;border-radius:8px;background:#ff6d00;color:#fff;font-weight:bold}#pad{position:absolute;bottom:0;width:100%;display:flex;justify-content:space-between;padding:8px;z-index:10}.b{width:62px;height:62px;background:#0006;border:2px solid #fff;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold}</style></head><body>
+<div id="hud"><div>💰 <span id="coin">0</span> | LVL <span id="lvl">1</span></div><div><button onclick="openShop()" style="background:#ff6d00;border:none;color:#fff;padding:4px 12px;border-radius:12px;font-weight:bold">🛒 SHOP (10 Bikes)</button></div></div>
+<div id="shop"><h2>KARNAFULI RIDER SHOP</h2><div id="list"></div><button onclick="closeShop()" style="width:100%;margin-top:8px;padding:8px;background:#444;color:#fff;border:none;border-radius:10px">CLOSE</button></div>
+<canvas id="c"></canvas>
+<div id="pad"><div style="display:flex;gap:8px"><div class="b" id="L">◀</div><div class="b" id="R">▶</div></div><div style="display:flex;gap:8px"><div class="b" id="B">⏪</div><div class="b" id="G">⏩</div></div></div>
+<script>
+let bikes=[{id:0,name:'Karnafuli 01',col:'#FF6D00',price:0,spd:0.38},{id:1,name:'Blue Storm',col:'#2979FF',price:100,spd:0.42},{id:2,name:'Hill Tiger',col:'#2E7D32',price:250,spd:0.45},{id:3,name:'City Beast',col:'#D50000',price:400,spd:0.48},{id:4,name:'River King',col:'#FFD600',price:600,spd:0.52},{id:5,name:'Bridge Master',col:'#00E5FF',price:800,spd:0.55},{id:6,name:'Chittagong Pro',col:'#AA00FF',price:1000,spd:0.58},{id:7,name:'Somapon Special',col:'#FF4081',price:1500,spd:0.62},{id:8,name:'KTM Xtreme',col:'#FF3D00',price:2000,spd:0.66},{id:9,name:'World Champion',col:'#fff',price:3000,spd:0.72}];
+let coins=+localStorage.getItem('kr_coins')||0,unlocked=JSON.parse(localStorage.getItem('kr_unlock')||'[0]'),curBike=+localStorage.getItem('kr_cur')||0,level=1,cv=document.getElementById('c'),cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+let bike={x:100,y:0,vx:0,vy:0,a:0,va:0},keys={},ground=[],coinObjs=[];
+function buildLevel(l){ground=[];coinObjs=[];for(let i=0;i<600;i++){let X=i*60,Y=480;if(l==1){if(i>10&&i<18)Y-=(i-10)*20}if(l==2){if(i>10&&i<22)Y-=(i-10)*25;if(i>30&&i<38)Y+=(i-30)*20}if(l>=3){Y+=Math.sin(i*0.3)*60;if(i>20&&i<26)Y=200}if(l>=4){Y+=Math.sin(i*0.5)*80}if(l==5){Y=380+Math.sin(i*0.7)*120;if(i%15==0)Y-=80}ground.push({x:X,y:Y});if(i%4==0)coinObjs.push({x:X+20,y:Y-50,got:false})}}
+buildLevel(level);
+function openShop(){document.getElementById('shop').style.display='block';renderShop()}
+function closeShop(){document.getElementById('shop').style.display='none'}
+function renderShop(){let html='';bikes.forEach(b=>{let isUnlock=unlocked.includes(b.id),isCur=curBike==b.id;html+=`<div class="bike"><div><b style="color:${b.col}">${b.name}</b><br><small>${b.price==0?'FREE':b.price+' 💰'} | Speed ${b.spd}</small></div><div>${isCur?'<button disabled>USING</button>':isUnlock?`<button onclick="selectBike(${b.id})">USE</button>`:`<button onclick="buyBike(${b.id})">BUY</button>`}</div></div>`});document.getElementById('list').innerHTML=html}
+function buyBike(id){let b=bikes[id];if(coins>=b.price){coins-=b.price;unlocked.push(id);save();renderShop();updateHUD()}else alert('Coin kom! Level khelo coin jomao!')}
+function selectBike(id){curBike=id;localStorage.setItem('kr_cur',id);renderShop()}
+function save(){localStorage.setItem('kr_coins',coins);localStorage.setItem('kr_unlock',JSON.stringify(unlocked))}
+function updateHUD(){document.getElementById('coin').innerText=coins;document.getElementById('lvl').innerText=level}
+function GY(x){let i=(x/60)|0;if(i<0||i>=599)return 500;let p=ground[i],n=ground[i+1]||p,t=(x-p.x)/60;return p.y+t*(n.y-p.y)}
+function GA(x){return Math.atan2(GY(x+20)-GY(x-20),40)}
+function loop(){if(bikes[curBike]){if(keys.g)bike.vx+=bikes[curBike].spd;if(keys.b)bike.vx-=bikes[curBike].spd}if(keys.l)bike.va-=0.14;if(keys.r)bike.va+=0.14;bike.vy+=0.9;bike.x+=bike.vx;bike.y+=bike.vy;bike.a+=bike.va;bike.va*=0.95;bike.vx*=0.987;let gy=GY(bike.x);if(bike.y+24>=gy){bike.y=gy-24;bike.vy=0;let ag=GA(bike.x);bike.a+=(ag-bike.a)*0.2}coinObjs.forEach(c=>{if(!c.got&&Math.hypot(bike.x-c.x,bike.y-c.y)<35){c.got=true;coins+=10;save();updateHUD()}});let cam=bike.x-120;cx.fillStyle='#7EC8E3';cx.fillRect(0,0,cv.width,cv.height);cx.save();cx.translate(-cam,0);cx.strokeStyle='#5D4037';cx.lineWidth=14;cx.beginPath();ground.forEach((g,i)=>{i?cx.lineTo(g.x,g.y):cx.moveTo(g.x,g.y)});cx.stroke();cx.fillStyle='#8D6E63';cx.beginPath();cx.moveTo(0,800);ground.forEach(g=>cx.lineTo(g.x,g.y));cx.lineTo(ground[599].x,800);cx.fill();coinObjs.forEach(c=>{if(!c.got){cx.fillStyle='#FFD600';cx.beginPath();cx.arc(c.x,c.y,8,0,7);cx.fill();cx.fillStyle='#000';cx.font='10px Arial';cx.fillText('₵',c.x-4,c.y+3)}});cx.fillStyle='#000';cx.fillRect(30000,0,160,20);cx.fillStyle='#FFEB3B';cx.font='bold 16px Arial';cx.fillText('FINISH LVL '+level,30010,150);cx.save();cx.translate(bike.x,bike.y);cx.rotate(bike.a);cx.fillStyle='#111';cx.beginPath();cx.arc(-22,14,12,0,7);cx.fill();cx.beginPath();cx.arc(24,14,12,0,7);cx.fill();cx.fillStyle=bikes[curBike].col;cx.fillRect(-16,-8,40,10);cx.fillRect(10,-16,8,18);cx.fillStyle='#FF6F00';cx.fillRect(-14,-20,18,18);cx.fillStyle='#111';cx.beginPath();cx.arc(2,-28,10,0,7);cx.fill();cx.fillStyle='#2979FF';cx.fillRect(-2,-32,10,5);cx.restore();cx.restore();if(bike.x>30000){level++;if(level>5){alert('YOU ARE WORLD CHAMPION! 🏆 Somapon Edition COMPLETE! Total Coins: '+coins);level=1}buildLevel(level);bike.x=100;bike.vx=0;updateHUD()}if(bike.y>700){bike.x-=60;bike.y=0;bike.vx=0}requestAnimationFrame(loop)}
+function btn(id,k){let e=document.getElementById(id);let on=ev=>{ev.preventDefault();keys[k]=true},off=()=>keys[k]=false;e.addEventListener('touchstart',on);e.addEventListener('touchend',off);e.addEventListener('mousedown',on);e.addEventListener('mouseup',off)}
+btn('G','g');btn('B','b');btn('L','l');btn('R','r');updateHUD();loop();
 </script></body></html>
