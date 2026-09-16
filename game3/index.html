@@ -2,41 +2,50 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Snake Game</title>
+<title>Snake - Somapon</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#fff;font-family:Arial;text-align:center}
-#top{height:50px;background:#1e293b;display:flex;justify-content:space-between;align-items:center;padding:0 15px}
-#top a{color:#22c55e;text-decoration:none;font-weight:bold}
-canvas{background:#1e293b;display:block;margin:10px auto;border:2px solid #22c55e;border-radius:10px}
-.btn{width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:5px;border:1px solid #fff}
-#pad{display:flex;flex-direction:column;align-items:center}
-.row{display:flex}
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+body{background:#0f172a;color:#fff;font-family:Arial;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+.top{width:100%;max-width:400px;display:flex;justify-content:space-between;padding:15px;background:#1e293b}
+.top a{color:#22c55e;text-decoration:none;font-weight:bold}
+#box{width:95vw;max-width:380px;height:380px;background:#020617;border:3px solid #22c55e44;border-radius:12px;position:relative;overflow:hidden;margin-top:10px}
+.snake{position:absolute;width:18px;height:18px;background:#22c55e;border-radius:4px}
+.food{position:absolute;width:18px;height:18px;background:#ef4444;border-radius:50%}
+.ctrl{margin-top:20px;display:grid;grid-template-columns:70px 70px 70px;grid-template-rows:60px 60px;gap:10px}
+.ctrl button{font-size:28px;background:#1e293b;border:2px solid #334155;border-radius:12px;color:#fff}
+#center{grid-column:2}
 </style>
 </head>
 <body>
-<div id="top"><a href="../">⬅ Hub</a><div id="sc">SCORE:0</div><div>🐍</div></div>
-<canvas id="c" width="340" height="340"></canvas>
-<div id="pad"><div class="btn" id="U">⬆️</div><div class="row"><div class="btn" id="L">⬅️</div><div class="btn" id="D">⬇️</div><div class="btn" id="R">➡️</div></div></div>
+<div class="top"><a href="../">← Hub</a><div id="sc">SCORE: 0</div><div>🐍</div></div>
+<div id="box"></div>
+<div class="ctrl">
+<button style="grid-column:2" ontouchstart="nd='up'" onclick="nd='up'">⬆️</button>
+<button ontouchstart="nd='left'" onclick="nd='left'">⬅️</button>
+<button ontouchstart="nd='down'" onclick="nd='down'">⬇️</button>
+<button ontouchstart="nd='right'" onclick="nd='right'">➡️</button>
+</div>
 <script>
-const C=document.getElementById('c'),X=C.getContext('2d'),G=20;
-let s=[{x:9,y:9}],d={x:1,y:0},f={x:5,y:5},sc=0;
+let box=document.getElementById('box'), sc=document.getElementById('sc');
+let snake=[{x:5,y:10},{x:4,y:10},{x:3,y:10}], food={x:15,y:10}, dir='right', nd='right', score=0, over=false;
 function draw(){
-X.fillStyle='#1e293b';X.fillRect(0,0,340,340);
-X.fillStyle='#ef4444';X.fillRect(f.x*G,f.y*G,G-2,G-2);
-X.fillStyle='#22c55e';s.forEach(p=>X.fillRect(p.x*G,p.y*G,G-2,G-2));
-let h={x:s[0].x+d.x,y:s[0].y+d.y};
-if(h.x<0||h.y<0||h.x>=17||h.y>=17||s.some(p=>p.x==h.x&&p.y==h.y)){alert('Over Score:'+sc);s=[{x:9,y:9}];d={x:1,y:0};sc=0}
-else{s.unshift(h);if(h.x==f.x&&h.y==f.y){sc++;f={x:Math.floor(Math.random()*17),y:Math.floor(Math.random()*17)}}else s.pop()}
-document.getElementById('sc').innerText='SCORE:'+sc;
+box.innerHTML='';
+let f=document.createElement('div');f.className='food';f.style.left=food.x*19+'px';f.style.top=food.y*19+'px';box.appendChild(f);
+snake.forEach((s,i)=>{let d=document.createElement('div');d.className='snake';d.style.left=s.x*19+'px';d.style.top=s.y*19+'px';if(i==0)d.style.background='#4ade80';box.appendChild(d);});
 }
-setInterval(draw,120);
-function setD(x,y){if(d.x!=-x||d.y!=-y)d={x,y}}
-document.getElementById('U').ontouchstart=()=>setD(0,-1);
-document.getElementById('D').ontouchstart=()=>setD(0,1);
-document.getElementById('L').ontouchstart=()=>setD(-1,0);
-document.getElementById('R').ontouchstart=()=>setD(1,0);
-addEventListener('keydown',e=>{if(e.key=='ArrowUp')setD(0,-1);if(e.key=='ArrowDown')setD(0,1);if(e.key=='ArrowLeft')setD(-1,0);if(e.key=='ArrowRight')setD(1,0)});
+function move(){
+if(over) return;
+dir=nd;
+let h={...snake[0]};
+if(dir=='up')h.y--; if(dir=='down')h.y++; if(dir=='left')h.x--; if(dir=='right')h.x++;
+if(h.x<0||h.y<0||h.x>=20||h.y>=20||snake.some(s=>s.x==h.x&&s.y==h.y)){over=true;alert('Over Score:'+score);location.reload();return;}
+snake.unshift(h);
+if(h.x==food.x&&h.y==food.y){score+=10;sc.innerText='SCORE:'+score;food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)};}else snake.pop();
+draw();
+}
+setInterval(move,140);
+draw();
+document.addEventListener('keydown',e=>{if(e.key=='ArrowUp'&&dir!='down')nd='up';if(e.key=='ArrowDown'&&dir!='up')nd='down';if(e.key=='ArrowLeft'&&dir!='right')nd='left';if(e.key=='ArrowRight'&&dir!='left')nd='right';});
 </script>
 </body>
 </html>
