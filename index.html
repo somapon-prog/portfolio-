@@ -1,88 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Mini Militia - By Somapon</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Somapon Game Zone - 50 Games</title>
 <style>
-html,body{margin:0;padding:0;background:#87CEEB;overflow:hidden;height:100%;user-select:none;-webkit-user-select:none;touch-action:none}
-#game{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#87CEEB;display:block}
-#ui{position:fixed;top:10px;left:0;right:0;display:flex;justify-content:space-between;padding:0 10px;z-index:100;pointer-events:none}
-.box{background:rgba(0,0,0,.85);color:#fff;padding:7px 14px;border-radius:20px;border:2px solid #fff;font-weight:700;font-size:14px}
-#joy{position:fixed;bottom:90px;left:20px;width:120px;height:120px;border:2px solid rgba(255,255,255,.7);border-radius:50%;z-index:100}
-#stick{position:absolute;width:50px;height:50px;background:yellow;border-radius:50%;left:35px;top:35px;box-shadow:0 0 10px orange}
-#btns{position:fixed;bottom:90px;right:20px;display:flex;flex-direction:column;gap:12px;z-index:100}
-.btn{width:75px;height:75px;border-radius:50%;border:3px solid #fff;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-touch-callout:none;font-size:14px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0f172a;color:#fff;min-height:100vh}
+header{padding:22px;text-align:center;background:linear-gradient(90deg,#7c3aed,#ec4899,#f59e0b);position:sticky;top:0;z-index:10}
+header h1{font-size:24px}header p{opacity:.9;font-size:14px;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;padding:15px;max-width:1100px;margin:0 auto}
+.card{background:#1e293b;border-radius:16px;padding:14px 8px;text-align:center;border:2px solid #334155;text-decoration:none;color:#fff;display:block;transition:.2s}
+.card.active{border-color:#22c55e;background:#162032;box-shadow:0 0 15px #22c55e44}
+.card:active{transform:scale(.96)}
+.icon{font-size:38px;margin:6px 0}
+.card h3{font-size:13px;margin:6px 0;line-height:1.2}
+.badge{font-size:11px;padding:3px 9px;border-radius:20px;display:inline-block;margin-top:6px;font-weight:bold}
+.live{background:#22c55e;color:#000}
+.soon{background:#334155;color:#94a3b8}
+footer{text-align:center;padding:30px;opacity:.5;font-size:12px}
 </style>
 </head>
 <body>
-<div id="ui">
-<div class="box">❤️ HP:<span id="hp">100</span></div>
-<div class="box">💀 Kill:<span id="kill">0</span></div>
-<div class="box">🔫 <span id="ammo">30</span></div>
+<header>
+<h1>🎮 SOMAPON GAME ZONE</h1>
+<p>50 Mini Games - Made in Chittagong, BD 🇧🇩</p>
+<p>somapon-prog.github.io/portfolio-/</p>
+</header>
+
+<div class="grid">
+<a class="card active" href="game1/"><div class="icon">🔫</div><h3>1. Mini Militia</h3><span class="badge live">● LIVE</span></a>
+<a class="card" href="game2/"><div class="icon">🏎️</div><h3>2. Car Racing</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game3/"><div class="icon">🐍</div><h3>3. Snake Game</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game4/"><div class="icon">⚽</div><h3>4. Football</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game5/"><div class="icon">🧱</div><h3>5. Brick Breaker</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game6/"><div class="icon">🏓</div><h3>6. Ping Pong</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game7/"><div class="icon">🎯</div><h3>7. Target Shoot</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game8/"><div class="icon">🚀</div><h3>8. Space War</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game9/"><div class="icon">🍄</div><h3>9. Mario Run</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game10/"><div class="icon">🧩</div><h3>10. Puzzle</h3><span class="badge soon">Soon</span></a>
+
+<a class="card" href="game11/"><div class="icon">🏍️</div><h3>11. Bike Race</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game12/"><div class="icon">✈️</div><h3>12. Plane Fight</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game13/"><div class="icon">🥊</div><h3>13. Boxing</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game14/"><div class="icon">🎳</div><h3>14. Bowling</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game15/"><div class="icon">🏀</div><h3>15. Basketball</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game16/"><div class="icon">🏏</div><h3>16. Cricket</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game17/"><div class="icon">🐦</div><h3>17. Flappy Bird</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game18/"><div class="icon">🚁</div><h3>18. Helicopter</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game19/"><div class="icon">🧟</div><h3>19. Zombie Shoot</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game20/"><div class="icon">🏹</div><h3>20. Archery</h3><span class="badge soon">Soon</span></a>
+
+<a class="card" href="game21/"><div class="icon">🚕</div><h3>21. Taxi Drive</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game22/"><div class="icon">🔪</div><h3>22. Knife Hit</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game23/"><div class="icon">🏃</div><h3>23. Temple Run</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game24/"><div class="icon">🐼</div><h3>24. Panda Jump</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game25/"><div class="icon">⚔️</div><h3>25. Sword Fight</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game26/"><div class="icon">🚓</div><h3>26. Police Chase</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game27/"><div class="icon">🎣</div><h3>27. Fishing</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game28/"><div class="icon">🧠</div><h3>28. Memory Match</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game29/"><div class="icon">💣</div><h3>29. Bomber Man</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game30/"><div class="icon">🛹</div><h3>30. Skateboard</h3><span class="badge soon">Soon</span></a>
+
+<a class="card" href="game31/"><div class="icon">🏂</div><h3>31. Snowboard</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game32/"><div class="icon">🎸</div><h3>32. Guitar Hero</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game33/"><div class="icon">🚀</div><h3>33. Rocket Launch</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game34/"><div class="icon">🐛</div><h3>34. Worm Zone</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game35/"><div class="icon">👾</div><h3>35. Alien Invader</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game36/"><div class="icon">🏰</div><h3>36. Castle Defend</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game37/"><div class="icon">🚤</div><h3>37. Boat Race</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game38/"><div class="icon">⛳</div><h3>38. Mini Golf</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game39/"><div class="icon">🥷</div><h3>39. Ninja Jump</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game40/"><div class="icon">🤖</div><h3>40. Robot Fight</h3><span class="badge soon">Soon</span></a>
+
+<a class="card" href="game41/"><div class="icon">👻</div><h3>41. Pacman</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game42/"><div class="icon">🏒</div><h3>42. Hockey</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game43/"><div class="icon">🎲</div><h3>43. Ludo</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game44/"><div class="icon">♟️</div><h3>44. Chess</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game45/"><div class="icon">🃏</div><h3>45. Card Game</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game46/"><div class="icon">🚧</div><h3>46. Parking</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game47/"><div class="icon">🎪</div><h3>47. Circus Jump</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game48/"><div class="icon">🌟</div><h3>48. Star Collect</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game49/"><div class="icon">🏆</div><h3>49. Tournament</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game50/"><div class="icon">👑</div><h3>50. Final Boss</h3><span class="badge soon">Soon</span></a>
 </div>
-<canvas id="game"></canvas>
-<div id="joy"><div id="stick"></div></div>
-<div id="btns">
-<div class="btn" id="bomb" style="background:#00cc00">💣</div>
-<div class="btn" id="jump" style="background:#0066ff">JUMP</div>
-<div class="btn" id="shoot" style="background:red">SHOOT</div>
-</div>
-<script>
-var c=document.getElementById('game'),x=c.getContext('2d');
-function rs(){c.width=window.innerWidth;c.height=window.innerHeight}rs();
-window.addEventListener('resize',rs);
-var player={x:80,y:c.height-200,w:32,h:42,hp:100,ammo:30,kills:0,vx:0,vy:0,g:false,hitTimer:0},ens=[],buls=[],jx=0;
-function spawn(){ens.push({x:c.width+50,y:c.height-150,w:32,h:42,hp:30,vx:-1.2-Math.random()*1.5,vy:0})}
-for(let i=0;i<3;i++)setTimeout(spawn,i*1200);
-function upd(){
- player.vx=jx*4.5;player.x+=player.vx;player.vy+=0.7;player.y+=player.vy;
- var gr=c.height-80;
- if(player.y+player.h>gr){player.y=gr-player.h;player.vy=0;player.g=true}else player.g=false;
- if(player.x<0)player.x=0;if(player.x>c.width-player.w)player.x=c.width-player.w;
- if(player.hitTimer>0)player.hitTimer--;
- ens.forEach(e=>{
-   e.x+=e.vx;e.vy+=0.7;e.y+=e.vy;if(e.y+e.h>gr){e.y=gr-e.h;e.vy=0}
-   if(e.x<-100)e.x=c.width+80;
-   if(player.hitTimer==0 && Math.abs(player.x-e.x)<30 && Math.abs(player.y-e.y)<30){
-     player.hp-=8;player.hitTimer=40;document.getElementById('hp').innerText=Math.max(0,Math.floor(player.hp));
-   }
- });
- buls.forEach((b,i)=>{
-   b.x+=b.vx;
-   ens.forEach((en,j)=>{
-     if(b.x>en.x&&b.x<en.x+en.w&&b.y>en.y&&b.y<en.y+en.h){
-       en.hp-=25;buls.splice(i,1);
-       if(en.hp<=0){ens.splice(j,1);player.kills++;document.getElementById('kill').innerText=player.kills;setTimeout(spawn,800)}
-     }
-   });
-   if(b.x>c.width)buls.splice(i,1);
- });
- if(player.hp<=0){alert("💀 Game Over! Total Kill: "+player.kills);location.reload()}
-}
-function drw(){
- x.fillStyle='#87CEEB';x.fillRect(0,0,c.width,c.height);
- x.fillStyle='#2ecc71';x.fillRect(0,c.height-80,c.width,80);
- x.fillStyle='#8B4513';x.fillRect(0,c.height-20,c.width,20);
- x.fillStyle=player.hitTimer>0 && player.hitTimer%6<3?'white':'#f1c40f';
- x.fillRect(player.x,player.y,player.w,player.h);
- x.font='22px Arial';x.fillText('😎',player.x+2,player.y-2);
- ens.forEach(e=>{
-   x.fillStyle='#e74c3c';x.fillRect(e.x,e.y,e.w,e.h);
-   x.fillText('👾',e.x+2,e.y-2);
-   x.fillStyle='red';x.fillRect(e.x,e.y-10,e.w,6);
-   x.fillStyle='lime';x.fillRect(e.x,e.y-10,e.w*(e.hp/30),6);
- });
- x.fillStyle='yellow';buls.forEach(b=>{x.beginPath();x.arc(b.x,b.y,5,0,6.28);x.fill()});
-}
-function loop(){upd();drw();requestAnimationFrame(loop)}loop();
-var joy=document.getElementById('joy'),stick=document.getElementById('stick');
-joy.addEventListener('touchstart',e=>{e.preventDefault();hm(e)},{passive:false});
-joy.addEventListener('touchmove',e=>{e.preventDefault();hm(e)},{passive:false});
-joy.addEventListener('touchend',()=>{jx=0;stick.style.left='35px';stick.style.top='35px'});
-function hm(e){var r=joy.getBoundingClientRect(),t=e.touches[0],dx=t.clientX-r.left-60,dy=t.clientY-r.top-60,d=Math.sqrt(dx*dx+dy*dy);if(d>40){dx=dx/d*40;dy=dy/d*40}stick.style.left=35+dx+'px';stick.style.top=35+dy+'px';jx=dx/40}
-document.getElementById('shoot').addEventListener('touchstart',e=>{e.preventDefault();if(player.ammo>0){buls.push({x:player.x+30,y:player.y+15,vx:11});player.ammo--;document.getElementById('ammo').innerText=player.ammo;if(player.ammo==0){player.ammo=30;document.getElementById('ammo').innerText=player.ammo}}},{passive:false});
-document.getElementById('jump').addEventListener('touchstart',e=>{e.preventDefault();if(player.g)player.vy=-14},{passive:false});
-document.getElementById('bomb').addEventListener('touchstart',e=>{e.preventDefault();ens.forEach(en=>{en.x+= (Math.random()-0.5)*100;});buls.push({x:player.x-20,y:player.y+15,vx:-8},{x:player.x+30,y:player.y+15,vx:8},{x:player.x+15,y:player.y-10,vx:0})});
-</script>
+
+<footer>Made by Somapon | Chittagong BD<br>Game 1 LIVE ✅ | Next Game 2 coming!</footer>
 </body>
 </html>
