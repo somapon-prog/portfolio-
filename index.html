@@ -2,19 +2,24 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Mini Militia - By Somapon</title>
 <style>
-html,body{margin:0;padding:0;background:#87CEEB;overflow:hidden;height:100%;user-select:none;-webkit-user-select:none}
+html,body{margin:0;padding:0;background:#87CEEB;overflow:hidden;height:100%;user-select:none;-webkit-user-select:none;touch-action:none}
 #game{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#87CEEB;display:block}
-#ui{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:10px;z-index:100}
-.box{background:rgba(0,0,0,.8);color:#fff;padding:6px 14px;border-radius:20px;border:2px solid #fff;font-weight:700}
-#joy{position:fixed;bottom:25px;left:20px;width:120px;height:120px;border:2px solid rgba(255,255,255,.6);border-radius:50%;z-index:100}
-#stick{position:absolute;width:50px;height:50px;background:yellow;border-radius:50%;left:35px;top:35px}
-#btns{position:fixed;bottom:25px;right:20px;display:flex;flex-direction:column;gap:15px;z-index:100}
-.btn{width:75px;height:75px;border-radius:50%;border:3px solid #fff;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-touch-callout:none}
+#ui{position:fixed;top:10px;left:0;right:0;display:flex;justify-content:space-between;padding:0 10px;z-index:100;pointer-events:none}
+.box{background:rgba(0,0,0,.85);color:#fff;padding:7px 14px;border-radius:20px;border:2px solid #fff;font-weight:700;font-size:14px}
+#joy{position:fixed;bottom:90px;left:20px;width:120px;height:120px;border:2px solid rgba(255,255,255,.7);border-radius:50%;z-index:100}
+#stick{position:absolute;width:50px;height:50px;background:yellow;border-radius:50%;left:35px;top:35px;box-shadow:0 0 10px orange}
+#btns{position:fixed;bottom:90px;right:20px;display:flex;flex-direction:column;gap:12px;z-index:100}
+.btn{width:75px;height:75px;border-radius:50%;border:3px solid #fff;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-touch-callout:none;font-size:14px}
 </style>
 </head>
 <body>
-<div id="ui"><div class="box">❤️ HP:<span id="hp">100</span></div><div class="box">💀 Kill:<span id="kill">0</span></div><div class="box">🔫 <span id="ammo">30</span></div></div>
+<div id="ui">
+<div class="box">❤️ HP:<span id="hp">100</span></div>
+<div class="box">💀 Kill:<span id="kill">0</span></div>
+<div class="box">🔫 <span id="ammo">30</span></div>
+</div>
 <canvas id="game"></canvas>
 <div id="joy"><div id="stick"></div></div>
 <div id="btns">
@@ -24,20 +29,22 @@ html,body{margin:0;padding:0;background:#87CEEB;overflow:hidden;height:100%;user
 </div>
 <script>
 var c=document.getElementById('game'),x=c.getContext('2d');
-function rs(){c.width=innerWidth;c.height=innerHeight}rs();
-var player={x:100,y:c.height-100,w:30,h:40,hp:100,ammo:30,kills:0,vx:0,vy:0,g:false,hitTimer:0},ens=[],buls=[],jx=0;
-function spawn(){ens.push({x:c.width+100,y:c.height-70,w:30,h:40,hp:30,vx:-1.2-Math.random(),vy:0})}
-for(let i=0;i<3;i++)setTimeout(spawn,i*1500);
+function rs(){c.width=window.innerWidth;c.height=window.innerHeight}rs();
+window.addEventListener('resize',rs);
+var player={x:80,y:c.height-200,w:32,h:42,hp:100,ammo:30,kills:0,vx:0,vy:0,g:false,hitTimer:0},ens=[],buls=[],jx=0;
+function spawn(){ens.push({x:c.width+50,y:c.height-150,w:32,h:42,hp:30,vx:-1.2-Math.random()*1.5,vy:0})}
+for(let i=0;i<3;i++)setTimeout(spawn,i*1200);
 function upd(){
- player.vx=jx*4;player.x+=player.vx;player.vy+=0.7;player.y+=player.vy;
- var gr=c.height-30;if(player.y+player.h>gr){player.y=gr-player.h;player.vy=0;player.g=true}else player.g=false;
- if(player.x<0)player.x=0;
+ player.vx=jx*4.5;player.x+=player.vx;player.vy+=0.7;player.y+=player.vy;
+ var gr=c.height-80;
+ if(player.y+player.h>gr){player.y=gr-player.h;player.vy=0;player.g=true}else player.g=false;
+ if(player.x<0)player.x=0;if(player.x>c.width-player.w)player.x=c.width-player.w;
  if(player.hitTimer>0)player.hitTimer--;
  ens.forEach(e=>{
    e.x+=e.vx;e.vy+=0.7;e.y+=e.vy;if(e.y+e.h>gr){e.y=gr-e.h;e.vy=0}
-   if(e.x<-100)e.x=c.width+100;
+   if(e.x<-100)e.x=c.width+80;
    if(player.hitTimer==0 && Math.abs(player.x-e.x)<30 && Math.abs(player.y-e.y)<30){
-     player.hp-=8;player.hitTimer=30;document.getElementById('hp').innerText=Math.floor(player.hp);
+     player.hp-=8;player.hitTimer=40;document.getElementById('hp').innerText=Math.max(0,Math.floor(player.hp));
    }
  });
  buls.forEach((b,i)=>{
@@ -45,28 +52,37 @@ function upd(){
    ens.forEach((en,j)=>{
      if(b.x>en.x&&b.x<en.x+en.w&&b.y>en.y&&b.y<en.y+en.h){
        en.hp-=25;buls.splice(i,1);
-       if(en.hp<=0){ens.splice(j,1);player.kills++;document.getElementById('kill').innerText=player.kills;setTimeout(spawn,1000)}
+       if(en.hp<=0){ens.splice(j,1);player.kills++;document.getElementById('kill').innerText=player.kills;setTimeout(spawn,800)}
      }
    });
    if(b.x>c.width)buls.splice(i,1);
  });
- if(player.hp<=0){alert("Game Over! Kill: "+player.kills);location.reload()}
+ if(player.hp<=0){alert("💀 Game Over! Total Kill: "+player.kills);location.reload()}
 }
 function drw(){
  x.fillStyle='#87CEEB';x.fillRect(0,0,c.width,c.height);
- x.fillStyle='#2ecc71';x.fillRect(0,c.height-30,c.width,30);
- x.fillStyle=player.hitTimer>0?'white':'#f1c40f';x.fillRect(player.x,player.y,player.w,player.h);
- ens.forEach(e=>{x.fillStyle='#e74c3c';x.fillRect(e.x,e.y,e.w,e.h);x.fillStyle='red';x.fillRect(e.x,e.y-8,e.w,5);x.fillStyle='lime';x.fillRect(e.x,e.y-8,e.w*(e.hp/30),5)});
+ x.fillStyle='#2ecc71';x.fillRect(0,c.height-80,c.width,80);
+ x.fillStyle='#8B4513';x.fillRect(0,c.height-20,c.width,20);
+ x.fillStyle=player.hitTimer>0 && player.hitTimer%6<3?'white':'#f1c40f';
+ x.fillRect(player.x,player.y,player.w,player.h);
+ x.font='22px Arial';x.fillText('😎',player.x+2,player.y-2);
+ ens.forEach(e=>{
+   x.fillStyle='#e74c3c';x.fillRect(e.x,e.y,e.w,e.h);
+   x.fillText('👾',e.x+2,e.y-2);
+   x.fillStyle='red';x.fillRect(e.x,e.y-10,e.w,6);
+   x.fillStyle='lime';x.fillRect(e.x,e.y-10,e.w*(e.hp/30),6);
+ });
  x.fillStyle='yellow';buls.forEach(b=>{x.beginPath();x.arc(b.x,b.y,5,0,6.28);x.fill()});
 }
 function loop(){upd();drw();requestAnimationFrame(loop)}loop();
 var joy=document.getElementById('joy'),stick=document.getElementById('stick');
-joy.addEventListener('touchstart',e=>{e.preventDefault();h(e)},{passive:false});
-joy.addEventListener('touchmove',e=>{e.preventDefault();h(e)},{passive:false});
+joy.addEventListener('touchstart',e=>{e.preventDefault();hm(e)},{passive:false});
+joy.addEventListener('touchmove',e=>{e.preventDefault();hm(e)},{passive:false});
 joy.addEventListener('touchend',()=>{jx=0;stick.style.left='35px';stick.style.top='35px'});
-function h(e){var r=joy.getBoundingClientRect(),t=e.touches[0],dx=t.clientX-r.left-60,dy=t.clientY-r.top-60,d=Math.sqrt(dx*dx+dy*dy);if(d>40){dx=dx/d*40;dy=dy/d*40}stick.style.left=35+dx+'px';stick.style.top=35+dy+'px';jx=dx/40}
-document.getElementById('shoot').addEventListener('touchstart',e=>{e.preventDefault();if(player.ammo>0){buls.push({x:player.x+30,y:player.y+15,vx:10});player.ammo--;document.getElementById('ammo').innerText=player.ammo;if(player.ammo==0){player.ammo=30;document.getElementById('ammo').innerText=player.ammo}}},{passive:false});
+function hm(e){var r=joy.getBoundingClientRect(),t=e.touches[0],dx=t.clientX-r.left-60,dy=t.clientY-r.top-60,d=Math.sqrt(dx*dx+dy*dy);if(d>40){dx=dx/d*40;dy=dy/d*40}stick.style.left=35+dx+'px';stick.style.top=35+dy+'px';jx=dx/40}
+document.getElementById('shoot').addEventListener('touchstart',e=>{e.preventDefault();if(player.ammo>0){buls.push({x:player.x+30,y:player.y+15,vx:11});player.ammo--;document.getElementById('ammo').innerText=player.ammo;if(player.ammo==0){player.ammo=30;document.getElementById('ammo').innerText=player.ammo}}},{passive:false});
 document.getElementById('jump').addEventListener('touchstart',e=>{e.preventDefault();if(player.g)player.vy=-14},{passive:false});
+document.getElementById('bomb').addEventListener('touchstart',e=>{e.preventDefault();ens.forEach(en=>{en.x+= (Math.random()-0.5)*100;});buls.push({x:player.x-20,y:player.y+15,vx:-8},{x:player.x+30,y:player.y+15,vx:8},{x:player.x+15,y:player.y-10,vx:0})});
 </script>
 </body>
 </html>
