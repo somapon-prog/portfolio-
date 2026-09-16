@@ -1,24 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Somapon - 2 Real Games</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MOTO X3M PRO - Real Bike Race</title>
 <style>
-body{margin:0;padding:20px;background:#020617;color:white;font-family:Arial;text-align:center}
-h1{color:#facc15} .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;max-width:500px;margin:20px auto}
-.card{background:#1e293b;border-radius:15px;padding:20px 10px;text-align:center;color:white;text-decoration:none;border:3px solid #facc15;display:block}
-.card.live{border-color:#22c55e;background:#14532d} .live-text{color:#22c55e;font-weight:bold;font-size:12px}
-.icon{font-size:40px}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none;-webkit-touch-callout:none}
+body{background:#87CEEB;font-family:'Fredoka',Arial;overflow:hidden}
+canvas{display:block}
+#top{position:fixed;top:0;left:0;right:0;height:58px;background:linear-gradient(#2a2a2a,#000);border-bottom:4px solid #ff6b00;display:flex;align-items:center;justify-content:space-between;padding:0 12px;color:#fff;z-index:20}
+#top b{color:#ff6b00}
+#controls{position:fixed;bottom:0;left:0;right:0;height:140px;z-index:20;display:flex;justify-content:space-between;padding:12px 16px;background:linear-gradient(transparent, #000000bb)}
+.btn{width:92px;height:92px;border-radius:28px;border:3px solid #fff;font-weight:800;font-size:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 0 #000, 0 0 20px rgba(0,0,0,.5)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #000}
+#win{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:24px;padding:22px;width:88%;max-width:380px;text-align:center;border:5px solid #ff6b00;display:none;z-index:99}
+.star{font-size:32px}
 </style>
 </head>
 <body>
-<h1>🔥 Somapon's 2 REAL Games</h1>
-<p style="color:#aaa">50 copy game deleted - Only Original</p>
-<div class="grid">
-<a class="card live" href="game1/"><div class="icon">💀</div><div>1. REAL STICK BOSS<br><span class="live-text">● LIVE - REAL FIGHT</span></div></a>
-<a class="card live" href="game2/"><div class="icon">🏍️</div><div>2. CTG NIGHT RIDER<br><span class="live-text">● LIVE - SOLO RIDE</span></div></a>
+<div id="top"><div>⏱ <span id="t">00:00</span> • 💀 <span id="d">0</span></div><div style="font-size:22px;letter-spacing:1px">MOTO <span style="color:#ff6b00">X3M</span> PRO</div><div>LEVEL <b id="lvl">1</b>/3</div></div>
+<canvas id="g"></canvas>
+<div id="controls">
+<div style="display:flex;gap:14px">
+<div class="btn" id="lb" style="background:#3b82f6"><span style="font-size:28px">↶</span>TILT</div>
+<div class="btn" id="bb" style="background:#ef4444"><span style="font-size:28px">!</span>BRAKE</div>
 </div>
-<p style="color:#888;margin-top:30px">Only 2 - But 100% Original & Real Stick!</p>
+<div style="display:flex;gap:14px">
+<div class="btn" id="gb" style="background:#22c55e"><span style="font-size:28px">⚡</span>GAS</div>
+<div class="btn" id="rb" style="background:#3b82f6"><span style="font-size:28px">↷</span>TILT</div>
+</div>
+</div>
+<div id="win"><div class="star">⭐⭐⭐</div><h2 style="font-size:28px">LEVEL COMPLETE!</h2><p id="wt" style="margin:10px 0;color:#666">You finished in 00:32</p><div style="background:#f3f4f6;border-radius:12px;padding:10px;margin:10px 0">🏆 New Best Time!</div><button onclick="next()" style="width:100%;padding:14px;background:#ff6b00;color:#fff;border:0;border-radius:14px;font-size:18px;font-weight:800">NEXT TRACK ▶</button><br><br><a href="../" style="color:#111;text-decoration:none;border:2px solid #111;padding:6px 14px;border-radius:10px">HOME</a></div>
+<script>
+const C=document.getElementById('g'), X=C.getContext('2d');
+function resize(){C.width=innerWidth; C.height=innerHeight} resize(); addEventListener('resize',resize);
+let bike={x:200,y:0,vx:0,vy:0,a:0,va:0,w:0,on:false}, keys={}, time=0, deaths=0, lvl=1, over=false, cam=0, parts=[];
+let ground=[]; function build(l){
+ ground=[]; let x=0,y=420;
+ for(let i=0;i<300;i++){
+  let nx=x+55; let ny=y;
+  if(l==1){
+   if(i>20&&i<25) ny=y-35*i%5*8;
+   if(i==25) ny=y-120;
+   if(i>25&&i<30) ny=220;
+   if(i>60&&i<70) ny=380+Math.sin(i)*18;
+   if(i>110&&i<130) ny=300; // loop entry
+  }
+  if(l==2){
+   if(i>15&&i<20) ny=y-80;
+   if(i>40&&i<50) ny=250+Math.cos(i)*30;
+   if(i>80&&i<100) ny=380;
+  }
+  ground.push({x,y,nx,ny}); x=nx; y=ny;
+ }
+ ground.push({x:20000,y:420,nx:20500,ny:420});
+}
+build(1);
+function gy(xx){
+ for(let g of ground){ if(xx>=g.x&&xx<g.nx){ let t=(xx-g.x)/(g.nx-g.x); return g.y*(1-t)+g.ny*t; } } return 420;
+}
+let last=0;
+function frame(t){
+ if(!last) last=t; let dt=Math.min(0.033,(t-last)/1000); last=t;
+ if(over){ requestAnimationFrame(frame); return; }
+ time+=dt;
+ let gas=keys.g, brake=keys.b, lt=keys.l, rt=keys.r;
+ if(gas) bike.vx+= 18*dt*(bike.on?1:0.4);
+ if(brake) bike.vx-= 16*dt;
+ if(lt) bike.va-= 4.5*dt;
+ if(rt) bike.va+= 4.5*dt;
+ bike.vx*= Math.pow(0.96,dt*60);
+ bike.vx=Math.max(-3,Math.min(9,bike.vx));
+ bike.vy+= 22*dt;
+ bike.x+= bike.vx*60*dt;
+ bike.y+= bike.vy*60*dt;
+ let g1=gy(bike.x-12), g2=gy(bike.x+18);
+ let avg=(g1+g2)/2;
+ let groundAng=Math.atan2(g2-g1,30);
+ if(bike.y+18>avg){
+   bike.y=avg-18;
+   if(bike.vy>2){ if(Math.abs(bike.a-groundAng)>1.2){ die(); } }
+   bike.vy=0; bike.on=true;
+   if(Math.abs(bike.a-groundAng)>0.6) bike.a+=(groundAng-bike.a)*0.12;
+   bike.a+=bike.va*dt*2;
+   bike.va*=0.92;
+ }else{ bike.on=false; bike.a+=bike.va*dt*2.5; bike.va*=0.985; }
+ bike.w+=bike.vx*dt*8;
+ cam+=(bike.x-200-cam)*0.12;
+ if(bike.x>15000){ win(); }
+ if(bike.y>800) die();
+ // draw
+ X.fillStyle='#87CEEB'; X.fillRect(0,0,C.width,C.height);
+ X.fillStyle='#ffd86b'; X.beginPath(); X.arc(C.width-110-cam*0.1,110,56,0,7); X.fill();
+ X.fillStyle='#fff'; X.globalAlpha=0.8; X.beginPath(); X.arc(200-cam*0.05,90,18,0,7); X.arc(230-cam*0.05,80,28,0,7); X.arc(265-cam*0.05,92,20,0,7); X.fill(); X.globalAlpha=1;
+ X.save(); X.translate(-cam,0);
+ // ground
+ X.strokeStyle='#5a3a1a'; X.lineWidth=8; X.lineCap='round'; X.lineJoin='round';
+ X.beginPath(); for(let i=0;i<ground.length;i++){ if(i==0) X.moveTo(ground[i].x,ground[i].y); else X.lineTo(ground[i].x,ground[i].y); } X.stroke();
+ X.fillStyle='#c68642'; X.beginPath(); X.moveTo(ground[0].x,ground[0].y); for(let g of ground) X.lineTo(g.nx,g.ny); X.lineTo(ground[ground.length-1].nx,C.height); X.lineTo(ground[0].x,C.height); X.fill();
+ // finish
+ X.fillStyle='#000'; X.fillRect(15000,gy(15000)-80,12,80); X.fillStyle='#fff'; for(let yy=0;yy<80;yy+=20) for(let xx=0;xx<40;xx+=20) if((xx/20+yy/20)%2==0){ X.fillRect(15012+xx,gy(15000)-80+yy,10,10); }
+ // bike
+ X.save(); X.translate(bike.x,bike.y); X.rotate(bike.a);
+ X.fillStyle='#111'; X.beginPath(); X.arc(-14,12,13,0,7); X.fill(); X.beginPath(); X.arc(16,12,13,0,7); X.fill();
+ X.fillStyle='#ff6b00'; X.fillRect(-14,-2,32,8); X.fillStyle='#222'; X.fillRect(-8,-8,18,4);
+ X.fillStyle='#e11'; X.fillRect(-2,-22,8,16); X.fillStyle='#000'; X.beginPath(); X.arc(1,-28,7,0,7); X.fill();
+ X.fillStyle='#fff'; X.globalAlpha=0.6; X.beginPath(); X.arc(-14,12,3,0,7); X.fill(); X.beginPath(); X.arc(16,12,3,0,7); X.fill(); X.globalAlpha=1;
+ X.restore();
+ X.restore();
+ document.getElementById('t').innerText=String(Math.floor(time/60)).padStart(2,'0')+':'+String(Math.floor(time%60)).padStart(2,'0');
+ requestAnimationFrame(frame);
+}
+function die(){ deaths++; document.getElementById('d').innerText=deaths; bike={x:Math.max(200,bike.x-300),y:0,vx:0,vy:0,a:0,va:0,w:0,on:false}; }
+function win(){ over=true; document.getElementById('win').style.display='block'; document.getElementById('wt').innerText='Time: '+document.getElementById('t').innerText+' • Deaths: '+deaths; }
+function next(){ lvl++; if(lvl>3) lvl=1; document.getElementById('lvl').innerText=lvl; document.getElementById('win').style.display='none'; build(lvl); bike={x:200,y:0,vx:0,vy:0,a:0,va:0,w:0,on:false}; time=0; over=false; cam=0; last=0; requestAnimationFrame(frame); }
+function bind(id,k){ let el=document.getElementById(id); let set=v=>keys[k]=v; el.addEventListener('touchstart',e=>{e.preventDefault(); set(true)}); el.addEventListener('touchend',e=>{e.preventDefault(); set(false)}); el.addEventListener('mousedown',()=>set(true)); el.addEventListener('mouseup',()=>set(false)); el.addEventListener('mouseleave',()=>set(false)); }
+bind('gb','g'); bind('bb','b'); bind('lb','l'); bind('rb','r');
+addEventListener('keydown',e=>{ if(e.key=='ArrowUp'||e.key=='w') keys.g=true; if(e.key=='ArrowDown'||e.key=='s') keys.b=true; if(e.key=='ArrowLeft'||e.key=='a') keys.l=true; if(e.key=='ArrowRight'||e.key=='d') keys.r=true; });
+addEventListener('keyup',e=>{ if(e.key=='ArrowUp'||e.key=='w') keys.g=false; if(e.key=='ArrowDown'||e.key=='s') keys.b=false; if(e.key=='ArrowLeft'||e.key=='a') keys.l=false; if(e.key=='ArrowRight'||e.key=='d') keys.r=false; });
+requestAnimationFrame(frame);
+</script>
 </body>
 </html>
