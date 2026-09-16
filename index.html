@@ -1,113 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOMAPON PORTFOLIO</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FF MINI BATTLE</title>
 <style>
-body{background:#000;color:#fff;font-family:monospace;text-align:center;padding:20px;margin:0}
-h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
-.box{border:1px solid #00ff88;padding:20px;border-radius:15px;max-width:400px;margin:20px auto;background:#0a0a0a}
-.btn{display:block;background:#00ff88;color:#000;padding:15px;border-radius:10px;text-decoration:none;font-weight:bold;margin-bottom:10px;cursor:pointer}
-.btn2{display:block;border:1px solid #00ff88;color:#00ff88;padding:15px;border-radius:10px;text-decoration:none;margin-bottom:10px}
-.switch{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
-.s{padding:10px 20px;border:1px solid #00ff88;border-radius:20px;cursor:pointer}
-.s.active{background:#00ff88;color:#000}
-.page{display:none}
-.page.active{display:block}
-#gameArea{width:100%;height:300px;position:relative;background:#111;border:1px solid #00ff88;border-radius:10px;overflow:hidden;margin:15px 0}
-.taka{position:absolute;font-size:25px;cursor:pointer;animation: pop 0.3s}
-@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+body{background:#000;color:#fff;font-family:monospace;text-align:center;margin:0;padding:15px}
+h1{color:#ffcc00} .box{border:1px solid #ffcc00;padding:15px;border-radius:15px;max-width:400px;margin:10px auto;background:#111}
+.btn{display:block;background:#ffcc00;color:#000;padding:15px;border-radius:10px;text-decoration:none;font-weight:bold;margin-bottom:10px}
+.s{padding:8px 12px;border:1px solid #ffcc00;border-radius:20px;cursor:pointer;font-size:11px}
+.s.active{background:#ffcc00;color:#000} .switch{display:flex;justify-content:center;gap:5px;margin-bottom:15px}
+.page{display:none}.page.active{display:block}
+#gameCanvas{border:2px solid #ffcc00;background:#111;border-radius:10px;width:100%;max-width:360px}
+.ad{border:1px dashed #555;padding:10px;margin:10px 0;color:#888;font-size:11px}
 </style>
 </head>
 <body>
-
 <div class="switch">
-<div class="s active" id="b1" onclick="show('p1','b1')">NEW SITE</div>
-<div class="s" id="b2" onclick="show('p2','b2')">OLD SITE</div>
-<div class="s" id="b3" onclick="show('p3','b3')">GAME 🎮</div>
+<div class="s" id="b1" onclick="show('p1','b1')">HOME</div>
+<div class="s" id="b2" onclick="show('p2','b2')">ABOUT</div>
+<div class="s active" id="b3" onclick="show('p3','b3')">FF BATTLE 🔫</div>
 </div>
-
-<div id="p1" class="page active">
-<h1>SOMAPON<br>HANGCHURI</h1>
-<p>Ethical Hacker | Developer<br>Khagrachari, Bangladesh</p>
+<div id="p1" class="page"><h1>FF MINI BATTLE</h1><div class="box"><p>Battle Royale Mini Game - Made in BD</p><a class="btn" href="#" onclick="show('p3','b3')">PLAY NOW</a></div></div>
+<div id="p2" class="page"><div class="box"><h3>Developer</h3><p>Bangladeshi Game Developer<br>Contact: WhatsApp</p><a class="btn" href="https://wa.me/8801623367437">CONTACT</a></div></div>
+<div id="p3" class="page active">
+<h1>FF MINI BATTLE 🔫</h1>
 <div class="box">
-<p>Building Future with Code<br>Python | Github | OSINT</p>
-<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Hire%20korte%20chai">HIRE ME ON WHATSAPP</a>
-<a class="btn2" href="https://www.facebook.com/profile.php?id=615590469431973">FACEBOOK</a>
+<div class="ad">🔥 AD SPACE - Ekhane pore Ad asbe = Taka asbe 💰</div>
+<p id="score">Kill: 0 | HP: 100</p>
+<canvas id="gameCanvas" width="320" height="400"></canvas>
+<button class="btn" onclick="startFF()" style="width:100%;margin-top:10px">START BATTLE</button>
+<a class="btn" style="background:#fff" href="#">📥 DOWNLOAD APK (Soon)</a>
+<p style="font-size:11px;color:#888">Tap kore guli koro!</p>
 </div>
 </div>
-
-<div id="p2" class="page">
-<img src="https://github.com/somapon-prog.png" style="width:100px;height:100px;border-radius:50%;border:2px solid #00ff88">
-<h1>SOMAPON HANGCHURI</h1>
-<div class="box">
-<h3 style="color:#00ff88">HIRE ME - 500 TAKA</h3>
-<p>Website Security Check<br>bkash: 01623-367437</p>
-<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20500%20Taka%20Service">HIRE ME NOW >>></a>
-</div>
-</div>
-
-<div id="p3" class="page">
-<h1 style="color:#00ff88">SOMAPON TAP GAME</h1>
-<p id="levelText">LEVEL 1 - 30 Sec Challenge</p>
-<div class="box">
-<p id="score">Taka: 0 | Time: 30</p>
-<div id="gameArea"></div>
-<button class="btn" onclick="startGame()" style="width:100%">START GAME</button>
-<p style="font-size:12px;margin-top:10px">💰 te tap koro! 300 hole Level 2!</p>
-<div style="margin-top:10px;border:1px dashed #333;padding:5px;font-size:10px;color:#555">AD SPACE - INCOME AREA 💵</div>
-</div>
-</div>
-
 <script>
-function show(p,b){
-document.getElementById('p1').classList.remove('active');
-document.getElementById('p2').classList.remove('active');
-document.getElementById('p3').classList.remove('active');
-document.getElementById('b1').classList.remove('active');
-document.getElementById('b2').classList.remove('active');
-document.getElementById('b3').classList.remove('active');
-document.getElementById(p).classList.add('active');
-document.getElementById(b).classList.add('active');
-}
-let score=0,time=30,active=false,timer,level=1;
-function startGame(){
-score=0;time=(level==1?30:40);active=true;
-document.getElementById('gameArea').innerHTML='';
-document.getElementById('levelText').innerText=`LEVEL ${level} - ${level==1?'30 Sec':'40 Sec SPEED MODE'}!`;
-document.getElementById('score').innerText=`Taka: 0 | Time: ${time}`;
-clearInterval(timer);
-timer=setInterval(()=>{
- time--;
- document.getElementById('score').innerText=`LEVEL ${level} - Taka: ${score} | Time: ${time}`;
- if(time<=0){
-  active=false;clearInterval(timer);
-  if(level==1 && score>=300){
-   alert(`BOSS LEVEL 1 PASS! ${score} Taka! Ekhon LEVEL 2 START!`);
-   level=2; setTimeout(startGame,500);
-  } else if(level==1){
-   alert(`BOSS! ${score} Taka! 300 lagbe Level 2 er jonno! Abar try koren!`);
-  } else {
-   alert(`🔥 BOSS PRO! FINAL SCORE: ${score} Taka! Apni Hacker!`);
-   level=1;
-   document.getElementById('levelText').innerText=`LEVEL 1 - 30 Sec Challenge`;
-  }
- }
-},1000);
-spawn();
-}
-function spawn(){
-if(!active) return;
-let d=document.createElement('div');
-d.className='taka'; d.innerText='💰';
-d.style.left=Math.random()*85+'%';
-d.style.top=Math.random()*80+'%';
-d.onclick=()=>{score+=10;d.remove();spawn()};
-document.getElementById('gameArea').appendChild(d);
-let speed = level==1 ? 1000 : 550;
-setTimeout(()=>{if(d.parentNode)d.remove(); if(active)spawn()},speed);
-}
+function show(p,b){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.s').forEach(x=>x.classList.remove('active'));document.getElementById(p).classList.add('active');document.getElementById(b).classList.add('active');}
+let canvas=document.getElementById('gameCanvas'), ctx=canvas.getContext('2d');
+let player={x:145,y:360,w:30,h:20}, bullets=[], enemies=[], kills=0, hp=100, game=false, loop;
+function startFF(){kills=0;hp=100;bullets=[];enemies=[];game=true;document.getElementById('score').innerText=`Kill: 0 | HP: 100`;clearInterval(loop);loop=setInterval(update,30);setInterval(()=>{if(game) enemies.push({x:Math.random()*280,y:-20,w:25,h:25,speed:2+Math.random()*2})},800);}
+function update(){ctx.clearRect(0,0,320,400);ctx.fillStyle="#ffcc00";ctx.fillRect(player.x,player.y,player.w,player.h);ctx.fillStyle="#00ff88";bullets.forEach((b,i)=>{b.y-=7;ctx.fillRect(b.x,b.y,4,10);if(b.y<0)bullets.splice(i,1)});ctx.fillStyle="#ff4444";enemies.forEach((e,ei)=>{e.y+=e.speed;ctx.fillRect(e.x,e.y,e.w,e.h);ctx.fillText("💀",e.x,e.y+15);if(e.y+e.h>player.y&&e.x<player.x+player.w&&e.x+e.w>player.x){enemies.splice(ei,1);hp-=10;document.getElementById('score').innerText=`Kill: ${kills} | HP: ${hp}`;if(hp<=0){game=false;alert(`BOOYAH! Kill: ${kills}`);clearInterval(loop)}}bullets.forEach((b,bi)=>{if(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){enemies.splice(ei,1);bullets.splice(bi,1);kills++;document.getElementById('score').innerText=`Kill: ${kills} | HP: ${hp}`}});if(e.y>400)enemies.splice(ei,1)})}
+canvas.addEventListener('click',(e)=>{if(!game)return;let rect=canvas.getBoundingClientRect();player.x=(e.clientX-rect.left)-15;bullets.push({x:player.x+13,y:player.y})});
 </script>
 </body>
 </html>
