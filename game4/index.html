@@ -1,13 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Football - Somapon</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;touch-action:none;font-family:Arial}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#0f172a;color:#fff;display:flex;flex-direction:column;align-items:center;min-height:100vh}
 .top{width:100%;max-width:450px;display:flex;justify-content:space-between;padding:12px 15px;background:#1e293b}
 .top a{color:#22c55e;text-decoration:none;font-weight:bold}
-#field{width:95vw;max-width:400px;height:500px;background:linear-gradient(#16a34a,#15803d);border:3px solid #fff3;border-radius:12px;position:relative;margin-top:10px;overflow:hidden}
+#field{width:95vw;max-width:400px;height:500px;background:linear-gradient(#16a34a,#15803d);border:3px solid #fff;border-radius:12px;position:relative;margin-top:10px;overflow:hidden}
 #goal{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:220px;height:80px;border:5px solid #fff;border-bottom:0;background:#ffffff22}
-#keeper{position:absolute;top:25px;
+#keeper{position:absolute;top:25px;left:45%;width:40px;height:40px;background:yellow;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:25px;transition:0.3s}
+#ball{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:35px;height:35px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:0.5s}
+h1{margin:10px;color:#22c55e}
+button{background:#22c55e;color:#000;padding:12px;border:none;border-radius:8px;font-weight:bold;margin:5px;font-size:16px}
+</style>
+</head>
+<body>
+<div class="top"><a href="../">⬅ Back</a><span>FOOTBALL ⚽</span></div>
+<h1>Score: <span id="sc">0</span></h1>
+<div id="field">
+<div id="goal"></div>
+<div id="keeper">🧤</div>
+<div id="ball">⚽</div>
+</div>
+<div style="margin:10px">
+<button onclick="shoot(0)">⬅ LEFT</button>
+<button onclick="shoot(1)">⬆ CENTER</button>
+<button onclick="shoot(2)">➡ RIGHT</button>
+</div>
+<script>
+let s=0;
+function shoot(d){
+ let k=document.getElementById('keeper');
+ let b=document.getElementById('ball');
+ let kp=Math.floor(Math.random()*3);
+ k.style.left = kp==0 ? '15%' : kp==1 ? '45%' : '75%';
+ b.style.left = d==0 ? '20%' : d==1 ? '50%' : '80%';
+ b.style.bottom='420px';
+ setTimeout(()=>{
+   if(d!=kp){s++; document.getElementById('sc').innerText=s;}
+   else{alert('GOALKEEPER SAVED! Score: '+s); s=0; document.getElementById('sc').innerText=0;}
+   b.style.bottom='20px'; b.style.left='50%';
+ },600);
+}
+</script>
+</body>
+</html>
