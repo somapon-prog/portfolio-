@@ -8,7 +8,7 @@
 body{background:#000;color:#fff;font-family:monospace;text-align:center;padding:20px;margin:0}
 h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
 .box{border:1px solid #00ff88;padding:20px;border-radius:15px;max-width:400px;margin:20px auto;background:#0a0a0a}
-.btn{display:block;background:#00ff88;color:#000;padding:15px;border-radius:10px;text-decoration:none;font-weight:bold;margin-bottom:10px}
+.btn{display:block;background:#00ff88;color:#000;padding:15px;border-radius:10px;text-decoration:none;font-weight:bold;margin-bottom:10px;cursor:pointer}
 .btn2{display:block;border:1px solid #00ff88;color:#00ff88;padding:15px;border-radius:10px;text-decoration:none;margin-bottom:10px}
 .switch{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
 .s{padding:10px 20px;border:1px solid #00ff88;border-radius:20px;cursor:pointer}
@@ -16,7 +16,8 @@ h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
 .page{display:none}
 .page.active{display:block}
 #gameArea{width:100%;height:300px;position:relative;background:#111;border:1px solid #00ff88;border-radius:10px;overflow:hidden;margin:15px 0}
-.taka{position:absolute;font-size:25px;cursor:pointer}
+.taka{position:absolute;font-size:25px;cursor:pointer;animation: pop 0.3s}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -45,21 +46,17 @@ h1{color:#00ff88;text-shadow:0 0 10px #00ff88}
 <p>Website Security Check<br>bkash: 01623-367437</p>
 <a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20500%20Taka%20Service">HIRE ME NOW >>></a>
 </div>
-<div class="box">
-<h3 style="color:#00ff88">SECURITY SERVICES</h3>
-<p>Check - 200 Tk<br>Guide - 150 Tk<br>Audit - 300 Tk</p>
-<a class="btn" href="https://wa.me/8801623367437?text=Salam%20Boss%20Security%20lagbe">BUY NOW >>></a>
-</div>
 </div>
 
 <div id="p3" class="page">
 <h1 style="color:#00ff88">SOMAPON TAP GAME</h1>
-<p>TESTER GAME - 30 Sec Challenge</p>
+<p id="levelText">LEVEL 1 - 30 Sec Challenge</p>
 <div class="box">
 <p id="score">Taka: 0 | Time: 30</p>
 <div id="gameArea"></div>
 <button class="btn" onclick="startGame()" style="width:100%">START GAME</button>
-<p style="font-size:12px;margin-top:10px">💰 te tap koro! Koto Taka paro?</p>
+<p style="font-size:12px;margin-top:10px">💰 te tap koro! 300 hole Level 2!</p>
+<div style="margin-top:10px;border:1px dashed #333;padding:5px;font-size:10px;color:#555">AD SPACE - INCOME AREA 💵</div>
 </div>
 </div>
 
@@ -74,16 +71,29 @@ document.getElementById('b3').classList.remove('active');
 document.getElementById(p).classList.add('active');
 document.getElementById(b).classList.add('active');
 }
-let score=0,time=30,active=false,timer;
+let score=0,time=30,active=false,timer,level=1;
 function startGame(){
-score=0;time=30;active=true;
+score=0;time=(level==1?30:40);active=true;
 document.getElementById('gameArea').innerHTML='';
-document.getElementById('score').innerText=`Taka: 0 | Time: 30`;
+document.getElementById('levelText').innerText=`LEVEL ${level} - ${level==1?'30 Sec':'40 Sec SPEED MODE'}!`;
+document.getElementById('score').innerText=`Taka: 0 | Time: ${time}`;
 clearInterval(timer);
 timer=setInterval(()=>{
  time--;
- document.getElementById('score').innerText=`Taka: ${score} | Time: ${time}`;
- if(time<=0){active=false;clearInterval(timer);alert(`BOSS! ${score} Taka! ScreenShot den!`)}
+ document.getElementById('score').innerText=`LEVEL ${level} - Taka: ${score} | Time: ${time}`;
+ if(time<=0){
+  active=false;clearInterval(timer);
+  if(level==1 && score>=300){
+   alert(`BOSS LEVEL 1 PASS! ${score} Taka! Ekhon LEVEL 2 START!`);
+   level=2; setTimeout(startGame,500);
+  } else if(level==1){
+   alert(`BOSS! ${score} Taka! 300 lagbe Level 2 er jonno! Abar try koren!`);
+  } else {
+   alert(`🔥 BOSS PRO! FINAL SCORE: ${score} Taka! Apni Hacker!`);
+   level=1;
+   document.getElementById('levelText').innerText=`LEVEL 1 - 30 Sec Challenge`;
+  }
+ }
 },1000);
 spawn();
 }
@@ -95,9 +105,9 @@ d.style.left=Math.random()*85+'%';
 d.style.top=Math.random()*80+'%';
 d.onclick=()=>{score+=10;d.remove();spawn()};
 document.getElementById('gameArea').appendChild(d);
-setTimeout(()=>{if(d.parentNode)d.remove(); if(active)spawn()},1000);
+let speed = level==1 ? 1000 : 550;
+setTimeout(()=>{if(d.parentNode)d.remove(); if(active)spawn()},speed);
 }
 </script>
-
 </body>
 </html>
