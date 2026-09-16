@@ -1,122 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>FF MINI JOYSTICK BATTLE</title>
-<style>
-body{margin:0;background:#000;color:#fff;font-family:monospace;overflow:hidden;touch-action:none}
-#ui{position:absolute;top:0;left:0;width:100%;display:flex;justify-content:space-between;padding:10px;box-sizing:border-box;z-index:10}
-.bar{background:rgba(0,0,0,0.7);border:1px solid #ffcc00;border-radius:20px;padding:6px 12px;font-size:13px}
-canvas{width:100vw;height:100vh;display:block;background:linear-gradient(#87CEEB,#228B22)}
-#joy{position:absolute;left:20px;bottom:30px;width:110px;height:110px;border:2px solid rgba(255,255,255,0.6);border-radius:50%;z-index:10}
-#stick{position:absolute;left:40px;top:40px;width:30px;height:30px;background:#ffcc00;border-radius:50%;box-shadow:0 0 10px #ffcc00}
-#btns{position:absolute;right:20px;bottom:30px;z-index:10;display:flex;flex-direction:column;gap:15px;align-items:center}
-.b{width:70px;height:70px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:bold;user-select:none}
-.shoot{background:rgba(255,40,40,0.9)}
-.jump{background:rgba(40,120,255,0.9)}
-.gren{background:rgba(50,220,80,0.9)}
-</style>
-</head>
-<body>
-<div id="ui">
-<div class="bar">❤️ HP: <span id="hp">100</span></div>
-<div class="bar">💀 Kill: <span id="kill">0</span></div>
-<div class="bar">🔫 <span id="ammo">30</span>/90</div>
-</div>
-<canvas id="gameCanvas"></canvas>
-<div id="joy"><div id="stick"></div></div>
-<div id="btns">
-<div class="b gren" id="gren">💣</div>
-<div class="b jump" id="jump">JUMP</div>
-<div class="b shoot" id="shoot">SHOOT</div>
-</div>
-<script>
-let canvas=document.getElementById('gameCanvas');
-let ctx=canvas.getContext('2d');
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-let player={x:100,y:300,w:28,h:28,vx:0,vy:0,jump:false,hp:100,kills:0,ammo:30};
-let bullets=[];
-let enemies=[];
-for(let i=0;i<5;i++){enemies.push({x:400+Math.random()*800,y:200+Math.random()*200,w:24,h:24,hp:30})}
-let joy={x:0,y:0,active:false};
-function gameLoop(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="#5d4037";
-ctx.fillRect(0,canvas.height-70,canvas.width,70);
-ctx.fillStyle="#8BC34A";
-ctx.fillRect(0,canvas.height-80,canvas.width,15);
-if(joy.active){player.vx=joy.x*5} else {player.vx=0}
-player.x+=player.vx;
-player.vy+=0.7;
-player.y+=player.vy;
-if(player.y+player.h>canvas.height-80){player.y=canvas.height-80-player.h;player.vy=0;player.jump=false}
-if(player.x<0)player.x=0;
-if(player.x>canvas.width-player.w)player.x=canvas.width-player.w;
-ctx.fillStyle="#ffcc00";
-ctx.fillRect(player.x,player.y,player.w,player.h);
-ctx.font="20px Arial";
-ctx.fillText("😎",player.x-2,player.y-5);
-ctx.fillStyle="#ff4444";
-enemies.forEach((e)=>{
-if(e.hp<=0)return;
-e.x+=Math.sin(Date.now()/600+e.y)*0.8;
-ctx.fillRect(e.x,e.y,e.w,e.h);
-ctx.fillText("🤖",e.x-2,e.y-5);
-bullets.forEach((b,bi)=>{
-if(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){
-e.hp-=10;
-bullets.splice(bi,1);
-if(e.hp<=0){
-player.kills++;
-document.getElementById('kill').innerText=player.kills;
-e.x=Math.random()*canvas.width;
-e.y=200+Math.random()*100;
-e.hp=30;
-}
-}
-});
-});
-ctx.fillStyle="#ffffff";
-bullets.forEach((b,i)=>{
-b.x+=b.vx;
-ctx.fillRect(b.x,b.y,8,4);
-if(b.x>canvas.width)bullets.splice(i,1);
-});
-requestAnimationFrame(gameLoop);
-}
-gameLoop();
-let joyEl=document.getElementById('joy');
-let stick=document.getElementById('stick');
-joyEl.addEventListener('touchstart',()=>{joy.active=true});
-joyEl.addEventListener('touchmove',(e)=>{
-let r=joyEl.getBoundingClientRect();
-let t=e.touches[0];
-let dx=t.clientX-(r.left+55);
-let dy=t.clientY-(r.top+55);
-let dist=Math.sqrt(dx*dx+dy*dy);
-if(dist>40){dx=dx/dist*40;dy=dy/dist*40}
-stick.style.left=40+dx+'px';
-stick.style.top=40+dy+'px';
-joy.x=dx/40;
-joy.y=dy/40;
-});
-joyEl.addEventListener('touchend',()=>{
-joy.active=false;joy.x=0;joy.y=0;
-stick.style.left='40px';stick.style.top='40px';
-});
-document.getElementById('shoot').addEventListener('touchstart',(e)=>{
-e.preventDefault();
-if(player.ammo<=0)return;
-player.ammo--;
-document.getElementById('ammo').innerText=player.ammo;
-bullets.push({x:player.x+28,y:player.y+12,vx:10});
-});
-document.getElementById('jump').addEventListener('touchstart',(e)=>{
-e.preventDefault();
-if(!player.jump){player.vy=-13;player.jump=true}
-});
-</script>
-</body>
-</html>
+
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><style>*{margin:0;padding:0;box-sizing:border-box;touch-action:none}body{background:#000;overflow:hidden;font-family:Arial}#game{width:100vw;height:100vh;display:block}#ui{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:10px;z-index:10}.box{background:rgba(0,0,0,.7);color:#fff;padding:6px 15px;border-radius:20px;border:2px solid #fff;font-weight:700}#joy{position:fixed;bottom:20px;left:20px;width:120px;height:120px;border:2px solid rgba(255,255,255,.5);border-radius:50%;z-index:10}#stick{position:absolute;width:50px;height:50px;background:rgba(255,255,0,.8);border-radius:50%;left:35px;top:35px;box-shadow:0 0 15px yellow}#btns{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:15px;z-index:10}.btn{width:75px;height:75px;border-radius:50%;border:3px solid #fff;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}</style></head><body><div id="ui"><div class="box">❤️ HP: <span id="hp">100</span></div><div class="box">💀 Kill: <span id="kill">0</span></div><div class="box">🔫 <span id="ammo">30</span>/90</div></div><canvas id="game"></canvas><div id="joy"><div id="stick"></div></div><div id="btns"><div class="btn" id="grenade" style="background:#00cc00">💣</div><div class="btn" id="jump" style="background:#0066ff">JUMP</div><div class="btn" id="shoot" style="background:red">SHOOT</div></div><script>
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');canvas.width=innerWidth;canvas.height=innerHeight;
+let player={x:100,y:canvas.height-100,w:30,h:40,hp:100,ammo:30,totalAmmo:90,kills:0,vx:0,vy:0,onGround:false},enemies=[],bullets=[];
+function spawnEnemy(){enemies.push({x:canvas.width+Math.random()*200,y:canvas.height-80,w:30,h:40,hp:30,vx:-2-Math.random(),vy:0})}
+for(let i=0;i<4;i++)setTimeout(spawnEnemy,i*900);
+function update(){player.vx=joyX*5;player.x+=player.vx;player.vy+=0.8;player.y+=player.vy;let g=canvas.height-30;if(player.y+player.h>g){player.y=g-player.h;player.vy=0;player.onGround=true}else player.onGround=false;if(player.x<0)player.x=0;enemies.forEach(e=>{e.x+=e.vx;e.vy+=0.8;e.y+=e.vy;if(e.y+e.h>g){e.y=g-e.h;e.vy=0}if(e.x<-50)e.x=canvas.width+100;if(Math.abs(player.x-e.x)<28&&Math.abs(player.y-e.y)<28){player.hp-=0.4;hp.innerText=Math.floor(player.hp)}});bullets.forEach((b,i)=>{b.x+=b.vx;enemies.forEach((en,j)=>{if(b.x>en.x&&b.x<en.x+en.w&&b.y>en.y&&b.y<en.y+en.h){en.hp-=25;bullets.splice(i,1);if(en.hp<=0){enemies.splice(j,1);player.kills++;kill.innerText=player.kills;setTimeout(spawnEnemy,700)}}});if(b.x>canvas.width)bullets.splice(i,1)});if(player.hp<=0){alert("Game Over! Kill:"+player.kills);location.reload()}}
+function draw(){ctx.fillStyle='#87CEEB';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#2ecc71';ctx.fillRect(0,canvas.height-30,canvas.width,30);ctx.fillStyle='#f1c40f';ctx.fillRect(player.x,player.y,player.w,player.h);ctx.font='24px Arial';ctx.fillText('😎',player.x-2,player.y-2);enemies.forEach(e=>{ctx.fillStyle='#e74c3c';ctx.fillRect(e.x,e.y,e.w,e.h);ctx.fillText('👾',e.x-2,e.y-2);ctx.fillStyle='red';ctx.fillRect(e.x,e.y-8,e.w,5);ctx.fillStyle='lime';ctx.fillRect(e.x,e.y-8,e.w*(e.hp/30),5)});ctx.fillStyle='yellow';bullets.forEach(b=>{ctx.beginPath();ctx.arc(b.x,b.y,4,0,Math.PI*2);ctx.fill()})}
+function loop(){update();draw();requestAnimationFrame(loop)}loop();
+const joy=document.getElementById('joy'),stick=document.getElementById('stick');let joyX=0,joyY=0;joy.addEventListener('touchstart',e=>h(e));joy.addEventListener('touchmove',e=>h(e));joy.addEventListener('touchend',()=>{joyX=0;joyY=0;stick.style.left='35px';stick.style.top='35px'});function h(e){let r=joy.getBoundingClientRect(),t=e.touches[0],x=t.clientX-r.left-60,y=t.clientY-r.top-60,d=Math.sqrt(x*x+y*y);if(d>40){x=x/d*40;y=y/d*40}stick.style.left=35+x+'px';stick.style.top=35+y+'px';joyX=x/40;joyY=y/40}
+shoot.addEventListener('touchstart',()=>{if(player.ammo>0){bullets.push({x:player.x+30,y:player.y+15,vx:12});player.ammo--;ammo.innerText=player.ammo;if(player.ammo==0&&player.totalAmmo>0){player.totalAmmo-=30;player.ammo=30;ammo.innerText=player.ammo}}});
+jump.addEventListener('touchstart',()=>{if(player.onGround)player.vy=-16});
+</script></body></html>
