@@ -2,43 +2,41 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Flappy Bird Pro</title>
+<title>Snake Game</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#fff;font-family:Arial;overflow:hidden;text-align:center}
+body{background:#0f172a;color:#fff;font-family:Arial;text-align:center}
 #top{height:50px;background:#1e293b;display:flex;justify-content:space-between;align-items:center;padding:0 15px}
 #top a{color:#22c55e;text-decoration:none;font-weight:bold}
-canvas{background:linear-gradient(#38bdf8,#0ea5e9);display:block;margin:10px auto;border-radius:12px}
-#tap{font-size:18px;margin-top:5px}
+canvas{background:#1e293b;display:block;margin:10px auto;border:2px solid #22c55e;border-radius:10px}
+.btn{width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:5px;border:1px solid #fff}
+#pad{display:flex;flex-direction:column;align-items:center}
+.row{display:flex}
 </style>
 </head>
 <body>
-<div id="top"><a href="../">⬅ Hub</a><div id="s">SCORE:0</div><div>🐦</div></div>
-<canvas id="c" width="360" height="600"></canvas>
-<div id="tap">TAP TO FLY 👆</div>
+<div id="top"><a href="../">⬅ Hub</a><div id="sc">SCORE:0</div><div>🐍</div></div>
+<canvas id="c" width="340" height="340"></canvas>
+<div id="pad"><div class="btn" id="U">⬆️</div><div class="row"><div class="btn" id="L">⬅️</div><div class="btn" id="D">⬇️</div><div class="btn" id="R">➡️</div></div></div>
 <script>
-const c=document.getElementById('c'),X=c.getContext('2d');
-let b={x:80,y:250,w:34,h:24,vy:0},p=[],sc=0,f=0;
-function add(){let h=Math.random()*200+50; p.push({x:360,y:0,w:60,h:h},{x:360,y:h+150,w:60,h:600})}
-X.fillStyle='#000';
-function loop(){
-f++;X.clearRect(0,0,360,600);
-b.vy+=0.4;b.y+=b.vy;
-if(f%90==0)add();
-for(let i=0;i<p.length;i++){p[i].x-=3;X.fillStyle='#22c55e';X.fillRect(p[i].x,p[i].y,p[i].w,p[i].h);
-if(b.x<b.x+p[i].w&&b.x+b.w>p[i].x&&b.y<b.y+p[i].h&&b.y+b.h>p[i].y){alert('Game Over Score:'+sc);b.y=250;b.vy=0;p=[];sc=0}
-if(p[i].x==80)sc++;
+const C=document.getElementById('c'),X=C.getContext('2d'),G=20;
+let s=[{x:9,y:9}],d={x:1,y:0},f={x:5,y:5},sc=0;
+function draw(){
+X.fillStyle='#1e293b';X.fillRect(0,0,340,340);
+X.fillStyle='#ef4444';X.fillRect(f.x*G,f.y*G,G-2,G-2);
+X.fillStyle='#22c55e';s.forEach(p=>X.fillRect(p.x*G,p.y*G,G-2,G-2));
+let h={x:s[0].x+d.x,y:s[0].y+d.y};
+if(h.x<0||h.y<0||h.x>=17||h.y>=17||s.some(p=>p.x==h.x&&p.y==h.y)){alert('Over Score:'+sc);s=[{x:9,y:9}];d={x:1,y:0};sc=0}
+else{s.unshift(h);if(h.x==f.x&&h.y==f.y){sc++;f={x:Math.floor(Math.random()*17),y:Math.floor(Math.random()*17)}}else s.pop()}
+document.getElementById('sc').innerText='SCORE:'+sc;
 }
-X.fillStyle='#facc15';X.fillRect(b.x,b.y,b.w,b.h);
-if(b.y>600||b.y<0){alert('Game Over Score:'+sc);b.y=250;b.vy=0;p=[];sc=0}
-document.getElementById('s').innerText='SCORE:'+sc;
-requestAnimationFrame(loop);
-}
-loop();
-function fly(){b.vy=-7}
-c.addEventListener('touchstart',e=>{e.preventDefault();fly()});
-c.addEventListener('mousedown',fly);
-addEventListener('keydown',e=>{if(e.code=='Space')fly()});
+setInterval(draw,120);
+function setD(x,y){if(d.x!=-x||d.y!=-y)d={x,y}}
+document.getElementById('U').ontouchstart=()=>setD(0,-1);
+document.getElementById('D').ontouchstart=()=>setD(0,1);
+document.getElementById('L').ontouchstart=()=>setD(-1,0);
+document.getElementById('R').ontouchstart=()=>setD(1,0);
+addEventListener('keydown',e=>{if(e.key=='ArrowUp')setD(0,-1);if(e.key=='ArrowDown')setD(0,1);if(e.key=='ArrowLeft')setD(-1,0);if(e.key=='ArrowRight')setD(1,0)});
 </script>
 </body>
 </html>
