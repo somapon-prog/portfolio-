@@ -7,11 +7,12 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#0f172a;color:#fff;min-height:100vh}
 header{padding:22px;text-align:center;background:linear-gradient(90deg,#7c3aed,#ec4899,#f59e0b);position:sticky;top:0;z-index:10}
-header h1{font-size:24px}header p{opacity:.9;font-size:14px;margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;padding:15px;max-width:1100px;margin:0 auto}
-.card{background:#1e293b;border-radius:16px;padding:14px 8px;text-align:center;border:2px solid #334155;text-decoration:none;color:#fff;display:block;transition:.2s}
+header h1{font-size:24px}
+header p{opacity:.9;font-size:14px;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;padding:15px;max-width:1100px;margin:auto}
+.card{background:#1e293b;border-radius:16px;padding:14px 8px;text-align:center;border:2px solid #334155;text-decoration:none;color:#fff;display:block}
 .card.active{border-color:#22c55e;background:#162032;box-shadow:0 0 15px #22c55e44}
-.card:active{transform:scale(.96)}
+.card.active{transform:scale(.96)}
 .icon{font-size:38px;margin:6px 0}
 .card h3{font-size:13px;margin:6px 0;line-height:1.2}
 .badge{font-size:11px;padding:3px 9px;border-radius:20px;display:inline-block;margin-top:6px;font-weight:bold}
@@ -29,7 +30,7 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:12px}
 
 <div class="grid">
 <a class="card active" href="game1/"><div class="icon">🔫</div><h3>1. Mini Militia</h3><span class="badge live">● LIVE</span></a>
-<a class="card" href="game2/"><div class="icon">🏎️</div><h3>2. Car Racing</h3><span class="badge soon">Soon</span></a>
+<a class="card active" href="game2/"><div class="icon">🏎️</div><h3>2. Car Racing</h3><span class="badge live">● LIVE</span></a>
 <a class="card" href="game3/"><div class="icon">🐍</div><h3>3. Snake Game</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game4/"><div class="icon">⚽</div><h3>4. Football</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game5/"><div class="icon">🧱</div><h3>5. Brick Breaker</h3><span class="badge soon">Soon</span></a>
@@ -39,7 +40,7 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:12px}
 <a class="card" href="game9/"><div class="icon">🍄</div><h3>9. Mario Run</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game10/"><div class="icon">🧩</div><h3>10. Puzzle</h3><span class="badge soon">Soon</span></a>
 
-<a class="card" href="game11/"><div class="icon">🏍️</div><h3>11. Bike Race</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game11/"><div class="icon">🚴</div><h3>11. Bike Race</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game12/"><div class="icon">✈️</div><h3>12. Plane Fight</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game13/"><div class="icon">🥊</div><h3>13. Boxing</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game14/"><div class="icon">🎳</div><h3>14. Bowling</h3><span class="badge soon">Soon</span></a>
@@ -53,9 +54,9 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:12px}
 <a class="card" href="game21/"><div class="icon">🚕</div><h3>21. Taxi Drive</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game22/"><div class="icon">🔪</div><h3>22. Knife Hit</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game23/"><div class="icon">🏃</div><h3>23. Temple Run</h3><span class="badge soon">Soon</span></a>
-<a class="card" href="game24/"><div class="icon">🐼</div><h3>24. Panda Jump</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game24/"><div class="icon">🥷</div><h3>24. Panda Jump</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game25/"><div class="icon">⚔️</div><h3>25. Sword Fight</h3><span class="badge soon">Soon</span></a>
-<a class="card" href="game26/"><div class="icon">🚓</div><h3>26. Police Chase</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game26/"><div class="icon">🏍️</div><h3>26. Police Chase</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game27/"><div class="icon">🎣</div><h3>27. Fishing</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game28/"><div class="icon">🧠</div><h3>28. Memory Match</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game29/"><div class="icon">💣</div><h3>29. Bomber Man</h3><span class="badge soon">Soon</span></a>
@@ -64,26 +65,25 @@ footer{text-align:center;padding:30px;opacity:.5;font-size:12px}
 <a class="card" href="game31/"><div class="icon">🏂</div><h3>31. Snowboard</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game32/"><div class="icon">🎸</div><h3>32. Guitar Hero</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game33/"><div class="icon">🚀</div><h3>33. Rocket Launch</h3><span class="badge soon">Soon</span></a>
-<a class="card" href="game34/"><div class="icon">🐛</div><h3>34. Worm Zone</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game34/"><div class="icon">🧟‍♂️</div><h3>34. Worm Zone</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game35/"><div class="icon">👾</div><h3>35. Alien Invader</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game36/"><div class="icon">🏰</div><h3>36. Castle Defend</h3><span class="badge soon">Soon</span></a>
-<a class="card" href="game37/"><div class="icon">🚤</div><h3>37. Boat Race</h3><span class="badge soon">Soon</span></a>
-<a class="card" href="game38/"><div class="icon">⛳</div><h3>38. Mini Golf</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game37/"><div class="icon">⛵</div><h3>37. Boat Race</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game38/"><div class="icon">🥋</div><h3>38. Mini Golf</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game39/"><div class="icon">🥷</div><h3>39. Ninja Jump</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game40/"><div class="icon">🤖</div><h3>40. Robot Fight</h3><span class="badge soon">Soon</span></a>
 
-<a class="card" href="game41/"><div class="icon">👻</div><h3>41. Pacman</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game41/"><div class="icon">🟡</div><h3>41. Pacman</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game42/"><div class="icon">🏒</div><h3>42. Hockey</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game43/"><div class="icon">🎲</div><h3>43. Ludo</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game44/"><div class="icon">♟️</div><h3>44. Chess</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game45/"><div class="icon">🃏</div><h3>45. Card Game</h3><span class="badge soon">Soon</span></a>
-<a class="card" href="game46/"><div class="icon">🚧</div><h3>46. Parking</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game46/"><div class="icon">🅿️</div><h3>46. Parking</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game47/"><div class="icon">🎪</div><h3>47. Circus Jump</h3><span class="badge soon">Soon</span></a>
-<a class="card" href="game48/"><div class="icon">🌟</div><h3>48. Star Collect</h3><span class="badge soon">Soon</span></a>
+<a class="card" href="game48/"><div class="icon">⭐</div><h3>48. Star Collect</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game49/"><div class="icon">🏆</div><h3>49. Tournament</h3><span class="badge soon">Soon</span></a>
 <a class="card" href="game50/"><div class="icon">👑</div><h3>50. Final Boss</h3><span class="badge soon">Soon</span></a>
 </div>
-
-<footer>Made by Somapon | Chittagong BD<br>Game 1 LIVE ✅ | Next Game 2 coming!</footer>
+<footer>Made by Somapon - Chittagong, BD - 2026</footer>
 </body>
 </html>
