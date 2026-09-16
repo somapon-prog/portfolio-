@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ludo King</title>
 <style>
 body{margin:0;background:#fde047;text-align:center;font-family:Arial}
-#board{width:340px;height:340px;background:#fff;border:4px solid #000;margin:10px auto;display:grid;grid-template-columns:repeat(15,1fr);grid-template-rows:repeat(15,1fr)}
+#board{width:330px;height:330px;background:#fff;border:4px solid #000;margin:10px auto;display:grid;grid-template-columns:repeat(15,1fr);grid-template-rows:repeat(15,1fr)}
 .cell{border:0.5px solid #ddd;display:flex;align-items:center;justify-content:center}
-.red{background:#ef4444}.green{background:#22c55e}.yellow{background:#eab308}.blue{background:#3b82f6}
-#dice{font-size:40px;background:#fff;width:70px;height:70px;line-height:70px;margin:10px auto;border:3px solid #000;border-radius:12px}
-button{padding:12px 22px;font-weight:bold;border-radius:10px;background:#000;color:#fff;border:0;font-size:16px}
-.dot{width:14px;height:14px;border-radius:50%;border:2px solid #000}
+.R{background:#ef4444}.G{background:#22c55e}.Y{background:#eab308}.B{background:#3b82f6}
+.path{background:#fff!important}
+#dice{font-size:50px;background:#fff;width:80px;height:80px;line-height:80px;margin:10px auto;border:4px solid #000;border-radius:15px}
+.token{width:14px;height:14px;border-radius:50%;border:2px solid #000}
 </style>
 </head>
 <body>
 <h2>🎲 LUDO KING 🎲</h2>
 <div id="dice" onclick="roll()">🎲</div>
-<h3 id="info">RED Turn - Roll!</h3>
+<h3 id="msg">RED Turn - 6 porle ber hobe</h3>
 <div id="board"></div>
-<button onclick="roll()">🎲 ROLL DICE</button
+<button onclick="roll()" style="padding:12px 25px;background:#000;color:#fff;border-radius:8px;font-weight:bold">ROLL DICE</button>
+<br><br><a href="../" style="background:#000;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none">⬅ BACK</a>
+<script>
+let board=document.getElementById('board'),turn=0,pos=[-1,-1,-1,-1];
+let colors=['#ef4444','#22c55e','#eab308','#3b82f6'],names=['RED','GREEN','YELLOW','BLUE'];
+for(let r=0;r<15;r++){for(let c=0;c<15;c++){let d=document.createElement('div');d.className='cell';d.id='r'+r+'c'+c;if(r<6&&c<6)d.classList.add('R');if(r<6&&c>8)d.classList.add('G');if(r>8&&c<6)d.classList.add('Y');if(r>8&&c>8)d.classList.add('B');board.appendChild(d)}}
+let path=[[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[7,1]];
+path.forEach(p=>{let el=document.getElementById('r'+p[0]+'c'+p[1]);if(el)el.classList.add('path')});
+function draw(){document.querySelectorAll('.token').forEach(e=>e.remove());for(let i=0;i<4;i++)if(pos[i]>=0){let rc=path[pos[i]];let cell=document.getElementById('r'+rc[0]+'c'+rc[1]);let t=document.createElement('div');t.className='token';t.style.background=colors[i];cell.appendChild(t)}}
+function roll(){let v=Math.floor(Math.random()*6)+1;document.getElementById('dice').innerText=v;if(pos[turn]==-1){if(v==6)pos[turn]=0;else{turn=(turn+1)%4;document.getElementById('msg').innerText=names[turn]+" Turn";return}}else{pos[turn]+=v;if(pos[turn]>=path.length){alert(names[turn]+" WIN!");pos=[-1,-1,-1,-1]}}draw();if(v!=6)turn=(turn+1)%4;document.getElementById('msg').innerText=names[turn]+" Turn";}
+draw();
+</script>
+</body>
+</html>
