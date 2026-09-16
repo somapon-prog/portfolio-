@@ -2,36 +2,42 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Football</title>
+<title>Football Pro</title>
+<style>
+body{margin:0;background:#16a34a;font-family:Arial;text-align:center;color:white}
+h1{font-size:28px;margin:10px}
+#field{width:95vw;max-width:500px;height:70vh;max-height:600px;background:#15803d;border:6px solid white;margin:10px auto;position:relative;border-radius:15px}
+#keeper{position:absolute;top:30px;left:42%;font-size:60px;transition:0.3s}
+#ball{position:absolute;bottom:30px;left:42%;font-size:60px;transition:0.5s}
+button{padding:20px 30px;font-size:22px;font-weight:bold;margin:8px;border-radius:12px;border:none}
+</style>
 </head>
-<body style="background:#22c55e;margin:0;text-align:center;font-family:Arial;color:white">
-<a href="../" style="display:block;background:black;color:white;padding:10px;text-decoration:none">⬅ BACK TO 50 GAMES</a>
-<h1 style="color:black">FOOTBALL ⚽ Score: <span id="sc">0</span></h1>
-
-<div style="width:320px;height:400px;background:#15803d;border:5px solid white;margin:10px auto;position:relative;border-radius:10px">
-<div style="width:200px;height:60px;border:4px solid white;border-bottom:0;margin:0 auto;background:rgba(255,255,255,0.2)"></div>
-<div id="keeper" style="position:absolute;top:40px;left:135px;font-size:35px;transition:0.3s">🧤</div>
-<div id="ball" style="position:absolute;bottom:20px;left:140px;font-size:35px;transition:0.5s">⚽</div>
+<body>
+<h1>⚽ FOOTBALL GAME ⚽</h1>
+<h2 id="sc" style="font-size:30px">Score: 0</h2>
+<div id="field">
+<div id="keeper">🧤</div>
+<div id="ball">⚽</div>
 </div>
-
-<button onclick="shoot(0)" style="padding:15px 25px;font-size:18px;margin:5px">LEFT</button>
-<button onclick="shoot(1)" style="padding:15px 25px;font-size:18px;margin:5px;background:yellow">CENTER</button>
-<button onclick="shoot(2)" style="padding:15px 25px;font-size:18px;margin:5px">RIGHT</button>
-
+<button onclick="shoot(0)">⬅ LEFT</button>
+<button onclick="shoot(1)" style="background:yellow">CENTER</button>
+<button onclick="shoot(2)">RIGHT ➡</button>
+<br><br>
+<a href="../" style="color:yellow;font-size:20px">⬅ BACK</a>
 <script>
-let score=0;
-function shoot(dir){
- let k=document.getElementById('keeper');
- let b=document.getElementById('ball');
- let kp=Math.floor(Math.random()*3);
- k.style.left = kp==0?'30px':kp==1?'135px':'240px';
- b.style.left = dir==0?'40px':dir==1?'140px':'240px';
- b.style.bottom='340px';
- setTimeout(()=>{
-  if(dir!=kp){score++; document.getElementById('sc').innerText=score;}
-  else{alert('Keeper Saved! Final Score: '+score); score=0; document.getElementById('sc').innerText=0;}
-  b.style.bottom='20px';
- },600);
+let s=0;
+function shoot(d){
+let kp=Math.floor(Math.random()*3);
+let k=document.getElementById('keeper');
+k.style.left=kp==0?'10%':kp==1?'42%':'75%';
+let b=document.getElementById('ball');
+b.style.left=d==0?'15%':d==1?'42%':'78%';
+b.style.bottom='75%';
+setTimeout(()=>{
+if(d!=kp){s++;document.getElementById('sc').innerText='Score: '+s}
+else{alert('Saved! Score: '+s);s=0;document.getElementById('sc').innerText='Score: 0'}
+b.style.bottom='30px';b.style.left='42%';
+},600);
 }
 </script>
 </body>
